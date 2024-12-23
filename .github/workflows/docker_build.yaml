@@ -15,28 +15,28 @@ jobs:
   docker_build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Disk Space (Before Cleanup)
-        run: df -h
-      - name: Cleanup Docker Space
-        run: docker system prune -a --volumes -f
-      - name: Clear BuildKit Cache
-        run: rm -rf /var/lib/buildkit/*
-      - name: Free disk space
-        run: |
-          # Disable swap (if it exists)
-          sudo swapoff -a || true
-          # Remove swapfile (if it exists)
-          [ -f /swapfile ] && sudo rm -f /swapfile || true
-          # Clean apt cache
-          sudo apt clean
-          # Remove Docker images, only if they exist
-          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
-          # Clean up all unused Docker resources (images, containers, volumes)
-          docker system prune -a --volumes -f || true
-          # Show disk space after cleanup
-          df -h
-      - name: Check Disk Space (After Cleanup)
-        run: df -h
+      #- name: Check Disk Space (Before Cleanup)
+      #  run: df -h
+      #- name: Cleanup Docker Space
+      #  run: docker system prune -a --volumes -f
+      #- name: Clear BuildKit Cache
+      #  run: rm -rf /var/lib/buildkit/*
+      #- name: Free disk space
+      #  run: |
+      #    # Disable swap (if it exists)
+      #    sudo swapoff -a || true
+      #    # Remove swapfile (if it exists)
+      #    [ -f /swapfile ] && sudo rm -f /swapfile || true
+      #    # Clean apt cache
+      #    sudo apt clean
+      #    # Remove Docker images, only if they exist
+      #    docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
+      #    # Clean up all unused Docker resources (images, containers, volumes)
+      #    docker system prune -a --volumes -f || true
+      #    # Show disk space after cleanup
+      #    df -h
+      #- name: Check Disk Space (After Cleanup)
+      #  run: df -h
       - name: Checkout repo
         uses: actions/checkout@v2.3.1
         with:
@@ -60,7 +60,8 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             -t ivanrodri2020/offlinerl:latest \
-            --no-cache \
+            --cache-from=type=registry,ref=ivanrodri2020/offlinerl:latest \
+            --cache-to=type=registry,ref=ivanrodri2020/offlinerl:latest,mode=max \
             --push .
       - name: Check Disk Space (After Build)
         run: df -h
