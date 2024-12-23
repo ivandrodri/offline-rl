@@ -21,12 +21,19 @@ jobs:
         run: docker system prune -a --volumes -f
       - name: Clear BuildKit Cache
         run: rm -rf /var/lib/buildkit/*
-      - name: free disk space
+      - name: Free disk space
         run: |
-          sudo swapoff -a
-          sudo rm -f /swapfile
+          # Disable swap (if it exists)
+          sudo swapoff -a || true
+          # Remove swapfile (if it exists)
+          [ -f /swapfile ] && sudo rm -f /swapfile || true
+          # Clean apt cache
           sudo apt clean
-          docker rmi $(docker image ls -aq)
+          # Remove Docker images, only if they exist
+          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
+          # Clean up all unused Docker resources (images, containers, volumes)
+          docker system prune -a --volumes -f || true
+          # Show disk space after cleanup
           df -h
       - name: Check Disk Space (After Cleanup)
         run: df -h
