@@ -52,7 +52,7 @@ jobs:
         run: |
           docker run --rm \
           -v ${{ github.workspace }}:/workspace \
-          ivandrodri2020/offlinerl:latest \
+          ivanrodri2020/offlinerl:latest \
           bash -c "cd /workspace && jupyter nbconvert --to html --output-dir ./html_files *.ipynb"
 
       # Step 5: Upload HTML files as GitHub Pages artifact (optional)
