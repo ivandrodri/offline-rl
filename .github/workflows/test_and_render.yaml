@@ -5,6 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write  # Allow write access to repository contents
+  pages: write     # Allow write access to GitHub Pages
+
 jobs:
   generate_html:
     runs-on: ubuntu-latest
