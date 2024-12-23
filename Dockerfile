@@ -90,8 +90,8 @@ RUN ipython kernel install --name "tfl-training-rl" --user
 # Start of HACK: the home directory is overwritten by a mount when a jhub server is started off this image
 # Thus, we create a jovyan-owned directory to which we copy the code and then move it to the home dir as part
 # of the entrypoint
-COPY --chown=${NB_UID}:${NB_GID} entrypoint.sh $CODE_DIR
-RUN chmod +x "${CODE_DIR}/"entrypoint.sh
+#COPY --chown=${NB_UID}:${NB_GID} entrypoint.sh $CODE_DIR
+#RUN chmod +x "${CODE_DIR}/"entrypoint.sh
 
 # Unfortunately, we cannot use ${CODE_DIR} in the ENTRYPOINT directive, so we have to hardcode it
 # Keep in sync with the value of CODE_DIR above
