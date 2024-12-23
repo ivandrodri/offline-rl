@@ -40,34 +40,34 @@ RUN poetry build
 
 
 #-------------- Main Image -------------------
-FROM jupyter/minimal-notebook:python-3.11 as MAIN
+#FROM jupyter/minimal-notebook:python-3.11 as MAIN
 
-ARG CODE_DIR=/tmp/code
+#ARG CODE_DIR=/tmp/code
 
-ENV DEBIAN_FRONTEND=noninteractive\
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONFAULTHANDLER=1 \
-    CODE_DIR=$CODE_DIR
+#ENV DEBIAN_FRONTEND=noninteractive\
+#    PYTHONDONTWRITEBYTECODE=1 \
+#    PYTHONUNBUFFERED=1 \
+#    PYTHONFAULTHANDLER=1 \
+#    CODE_DIR=$CODE_DIR
 
-ENV PATH="${CODE_DIR}/.venv/bin:$PATH"
+#ENV PATH="${CODE_DIR}/.venv/bin:$PATH"
 
-USER root
+#USER root
 
 # pandoc needed for docs, see https://nbsphinx.readthedocs.io/en/0.7.1/installation.html?highlight=pandoc#pandoc
 # gh-pages action uses rsync
 # opengl and ffmpeg needed for rendering envs. These packages are needed for torcs and mujoco.
 
-RUN touch ~/.Xauthority
+#RUN touch ~/.Xauthority
 
-USER ${NB_UID}
+#USER ${NB_UID}
 
-WORKDIR ${CODE_DIR}
+#WORKDIR ${CODE_DIR}
 
 # Copy virtual environment from base image
-COPY --from=BASE ${CODE_DIR}/.venv ${CODE_DIR}/.venv
+#COPY --from=BASE ${CODE_DIR}/.venv ${CODE_DIR}/.venv
 # Copy built package from base image
-COPY --from=BASE ${CODE_DIR}/dist ${CODE_DIR}/dist
+#COPY --from=BASE ${CODE_DIR}/dist ${CODE_DIR}/dist
 
 # This goes directly into main jupyter, not poetry env
 
@@ -75,17 +75,17 @@ COPY --from=BASE ${CODE_DIR}/dist ${CODE_DIR}/dist
 # Install Mujoco
 
 
-WORKDIR "${HOME}"
+#WORKDIR "${HOME}"
 
-COPY --chown=${NB_UID}:${NB_GID} . $CODE_DIR
+#COPY --chown=${NB_UID}:${NB_GID} . $CODE_DIR
 
 # Move to the code dir to install dependencies as the CODE_DIR contains the
 # complete code base, including the poetry.lock file
-WORKDIR $CODE_DIR
+#WORKDIR $CODE_DIR
 
-RUN pip install --no-cache-dir dist/*.whl
+#RUN pip install --no-cache-dir dist/*.whl
 
-RUN ipython kernel install --name "tfl-training-rl" --user
+#RUN ipython kernel install --name "tfl-training-rl" --user
 
 # Start of HACK: the home directory is overwritten by a mount when a jhub server is started off this image
 # Thus, we create a jovyan-owned directory to which we copy the code and then move it to the home dir as part
