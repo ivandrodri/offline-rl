@@ -48,10 +48,16 @@ jobs:
             --cache-to=type=local,dest=/tmp/buildkit-cache \
             --load .
           env:
-          BUILDKIT_MAX_CACHE_SIZE: 10GB
+          BUILDKIT_MAX_CACHE_SIZE: 20GB
         #run: |
         #  docker buildx create --use
         #  docker buildx build --platform linux/amd64 -t myusername/myimage:latest --load .
       # Step 10: Check disk space after build
       - name: Check Disk Space (After Build)
         run: df -h
+      # Step 5: Upload the image as an artifact
+      - name: Upload Docker Image Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: myimage.tar
