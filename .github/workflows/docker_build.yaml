@@ -59,7 +59,7 @@ jobs:
           docker buildx create --use
           docker buildx build \
             --platform linux/amd64 \
-            -t ivandrodri2020/offlinerl \
+            -t ivanrodri2020/offlinerl:latest \
             --cache-from=type=local,src=/tmp/buildkit-cache \
             --cache-to=type=local,dest=/tmp/buildkit-cache \
             --push .
