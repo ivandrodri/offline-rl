@@ -15,6 +15,12 @@ jobs:
   docker_build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Disk Space (Before Cleanup)
+        run: df -h
+      - name: Cleanup Docker Space
+        run: docker system prune -a --volumes -f
+      - name: Check Disk Space (After Cleanup)
+        run: df -h
       - name: Checkout repo
         uses: actions/checkout@v2.3.1
         with:
