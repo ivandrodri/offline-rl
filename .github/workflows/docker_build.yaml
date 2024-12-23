@@ -60,8 +60,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             -t ivanrodri2020/offlinerl:latest \
-            --cache-from=type=local,src=/tmp/buildkit-cache \
-            --cache-to=type=local,dest=/tmp/buildkit-cache \
+            --no-cache \
             --push .
       - name: Check Disk Space (After Build)
         run: df -h
