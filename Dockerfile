@@ -36,7 +36,8 @@ RUN poetry install --no-interaction --no-ansi --no-root --with offline
 COPY --chown=${NB_UID}:${NB_GID} src/ src/
 COPY --chown=${NB_UID}:${NB_GID} README.md .
 
-RUN poetry build
+#RUN poetry build
+RUN poetry install
 
 
 #-------------- Main Image -------------------
