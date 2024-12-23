@@ -59,16 +59,9 @@ jobs:
           docker buildx create --use
           docker buildx build \
             --platform linux/amd64 \
-            -t ivandrodri2020/offlinerl:latest \
+            -t ivandrodri2020/offlinerl \
             --cache-from=type=local,src=/tmp/buildkit-cache \
             --cache-to=type=local,dest=/tmp/buildkit-cache \
             --push .
-      # Step 10: Check disk space after build
       - name: Check Disk Space (After Build)
         run: df -h
-      # Step 5: Upload the image as an artifact
-      #- name: Upload Docker Image Artifact
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: docker-image
-      #    path: myimage.tar
