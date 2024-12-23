@@ -51,10 +51,10 @@ jobs:
       - name: Convert Notebooks to HTML
         run: |
           docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          ivanrodri2020/offlinerl:latest \
-          bash -c "cd /workspace && jupyter nbconvert --to html --output-dir ./html_files *.ipynb"
-
+            -v ${{ github.workspace }}:/workspace \
+            ivanrodri2020/offlinerl:latest \
+            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace && jupyter nbconvert --to html --output-dir ./html_files *.ipynb"
+            
       # Step 5: Upload HTML files as GitHub Pages artifact (optional)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
