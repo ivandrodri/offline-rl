@@ -95,7 +95,7 @@ RUN chmod +x "${CODE_DIR}/"entrypoint.sh
 
 # Unfortunately, we cannot use ${CODE_DIR} in the ENTRYPOINT directive, so we have to hardcode it
 # Keep in sync with the value of CODE_DIR above
-ENTRYPOINT ["/tmp/code/entrypoint.sh"]
+#ENTRYPOINT ["/tmp/code/entrypoint.sh"]
 
 # End of HACK
 
