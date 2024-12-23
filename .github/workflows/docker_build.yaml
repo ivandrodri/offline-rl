@@ -21,6 +21,9 @@ jobs:
         run: docker system prune -a --volumes -f
       - name: Check Disk Space (After Cleanup)
         run: df -h
+      - name: Cleanup Logs
+        run: |
+          sudo rm -rf /home/runner/runners/*_diag/*
       - name: Checkout repo
         uses: actions/checkout@v2.3.1
         with:
