@@ -22,7 +22,7 @@ jobs:
 
       # Step 3: Pull the Docker image from Docker Hub
       - name: Pull Docker image
-        run: docker pull ivandrodri2020/offlinerl:latest
+        run: docker pull ivanrodri2020/offlinerl:latest
 
       # Step 4: Convert Notebooks to HTML
       - name: Convert Notebooks to HTML
