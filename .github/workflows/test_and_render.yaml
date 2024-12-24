@@ -52,26 +52,27 @@ jobs:
         run: docker pull ivanrodri2020/offlinerl:latest
 
 
-      - name: List files in the container
-        run: |
-          docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          ivanrodri2020/offlinerl:latest \
-          bash -c "ls -R /workspace"
-
-
       - name: Set permissions for workspace directory
         run: sudo chmod -R 777 ${{ github.workspace }}
 
-      # Step 4: Convert Notebooks to HTML
       - name: Convert Notebooks to HTML
         run: |
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
             ivanrodri2020/offlinerl:latest \
-            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files *.ipynb"
-            
-      # Step 5: Upload HTML files as GitHub Pages artifact (optional)
+            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files --template toc *.ipynb"
+
+
+      - name: Create index.html
+        run: |
+          echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./html_files/index.html
+          for file in ./html_files/*.html; do
+            filename=$(basename $file)
+            echo "<li><a href=\"$filename\">$filename</a></li>" >> ./html_files/index.html
+          done
+          echo "</ul></body></html>" >> ./html_files/index.html
+
+                
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
