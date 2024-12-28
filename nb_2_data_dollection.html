@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Offline_RL_theory</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>nb_2_data_dollection</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7476,8 +7476,9 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
@@ -7486,8 +7487,12 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="Snow" src="_static/images/aai-institute-cover.svg" style="width:100%;"/>
-<div class="md-slide title"> Offline RL Part I </div>
+<h1 id="Exercise:-Minari-data-collection">Exercise: Minari data collection<a class="anchor-link" href="#Exercise:-Minari-data-collection">¶</a></h1><p>In this exercise you don't have any homework. The idea is to play around with it to get familiar with the code  (notebooks and source code) and with the way we collect data.</p>
+<p>Remember that the pipeline for offline learning will be the following:</p>
+<img alt="Snow" src="_static/images/93_offline_RL_pipeline.png" style="width:50%;"/>
+<p>In this notebook we will be exploring the steps 1-2-3 . It would be a good idea now to give a look to the code structure:</p>
+<img alt="Snow" src="_static/images/93_code_structure.png" style="width:20%;"/>
+<p>You can also give a look to <a href="https://minari.farama.org/main/content/basic_usage/">Minari documentation</a> if needed.</p>
 </div>
 </div>
 </div>
@@ -7498,24 +7503,12 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Offline-RL-theory">Offline RL theory<a class="anchor-link" href="#Offline-RL-theory">¶</a></h1>
+<h2 id="STEP-1:-Create-the-environments">STEP 1: Create the environments<a class="anchor-link" href="#STEP-1:-Create-the-environments">¶</a></h2>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Main-issues">Main issues<a class="anchor-link" href="#Main-issues">¶</a></h2><p>Can techniques from online RL, known for solving complex problems effectively, be applied to offline RL?</p>
-<img alt="offline_rl" src="_static/images/nb_94_on_policy_vs_off_policy.png" style="width:60%"/>
-<div class="slide title"> On-policy vs. off-policy approaches.
-</div>
-</div>
-</div>
-</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7523,74 +7516,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In off-policy online RL, we use a replay buffer to store $(state, action, reward)$ data, updating it as the learned policy improves. Why not apply an off-policy algorithm, filling the replay buffer directly with collected data.</p>
-<img alt="offline_rl" src="_static/images/nb_94_off_policy_vs_offline.png" style="width:70%"/>
-</div>
-<p><strong>This is just a qualitative parallelism, and offline RL will work even if the data in your replay buffer is far from optimal.</strong></p>
-<p><strong>However, even though both approaches seem similar, off-policy methods won't be able to work with collected data directly.</strong></p>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>A bit of review:</strong></p>
-<p>In particular, as we learned yesterday, many off-policy RL algorithms make use of the following approach:</p>
-<p>$$
-{\hat Q}^{k+1} \leftarrow L_1 = \arg \min_Q \mathbb{E}_{(s,a,s')\sim D} \left[\left( Q_\phi(s, a) - r(s, a) - \gamma \mathbb{E}_{a' \sim\pi_\theta(a'|s')}[Q_\phi(s', a')] \right)^2 \right]  \tag{Evaluation}
-$$</p>
-<p>$$
-\pi_{k+1} \leftarrow L_2 = \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi_\theta(a|s)} Q^{k+1}_\phi(s, a) \right] \tag{Improvement}
-$$</p>
-<p>with:</p>
-<p>$$ 
-Q^\pi(s, a) = \mathbb{E}_\pi \left[ r_0 + \gamma r_1 + \gamma^2 r_2 + \ldots \mid s_0 = s, a_0 = a \right]
-\tag{Q-value}
-$$</p>
-<img alt="offline_rl" src="_static/images/nb_94_q_value.png" style="height:200px;"/>
-<p>where $D$ is the replay buffer, which in the offline RL case will be filled with the collected dataset.</p>
-<p><strong>As seen in the (Evaluation) step, the only potential out-of-distribution (o.o.d) issue arises when computing action $a'$, as all other values ($s$, $a$, $s'$) are from the dataset $D$.</strong></p>
-<p><strong>The most significant distributional shift issue in offline RL is this potential overestimation problem, as already discussed in the introduction.</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="offline_rl" src="_static/images/94_dqn_ood_case.png" style="width:50%"/>
-<p>If during the evaluation loop:</p>
-<p>$$
-{\hat Q}^{k+1} \leftarrow L_1 = \arg \min_Q \mathbb{E}_{(s,a,s')\sim D} \left[\left( Q_\phi(s, a) - r(s, a) - \gamma \mathbb{E}_{a' \sim\pi_\theta(a'|s')}[Q_\phi(s', a')] \right)^2 \right]  \tag{Evaluation}
-$$</p>
-<p>the policy, $\pi_\theta(.|s)$, samples o.o.d. actions like $a'_4$ in the figure, as we don't know the rewards on o.o.d. regions, $Q(s',a'_4)$, would be unpredictable.</p>
-<p>If by chance, $Q(s',a'_4)$, is higher than that of in-distribution actions like, $a'_0, a'_1, a'_2$, this overestimated misinformation will propagate into the improvement step:</p>
-<p>$$
-\pi_{k+1} \leftarrow L_2 = \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi_\theta(a|s)} Q^{k+1}_\phi(s, a) \right] \tag{Improvement}
-$$</p>
-<p>as, during improvement, we try to find the policy that maximizes $Q(s,a)$. Therefore, the policy will have a tendency to go o.o.d. quite often.</p>
-<p><strong>This could be catastrophic during inference!!</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The figure below illustrates the problem of overestimating Q-values in the off-policy Soft Actor Critic (SAC) algorithm on the half-cheetah environment.</p>
-<img alt="offline_rl" src="_static/images/94_offpolicy_Q_values_overestimation.png" style="width:70%"/>
-<p><strong>In online RL, overestimation is addressed through exploration, which is not possible in offline methods</strong></p>
-<p><strong>Note: If we replace $a'$ with the dataset value in the evaluation step, we would learn $Q^\beta(s,a)$, the Q-value of the behavior policy. However, this would lead to the learned policy in the improvement step being generally far from optimal, especially when dealing with suboptimal data as is common in real scenarios.</strong></p>
+<p><strong>Select and render behavior policies</strong></p>
 </div>
 </div>
 </div>
@@ -7602,8 +7528,19 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>The other important aspect of the offpolicy method introduced earlier is that it implements a dynamic programming approach that is responsible for implementing the "stitching" property, which is crucial for connecting suboptimal trajectories into optimal ones</strong>.</p>
-<img alt="offline_rl" src="_static/images/nb_94_stitching_property.png" style="width:40%"/>
+<h2 id="STEP-2:-Create-Minari-datasets">STEP 2: Create Minari datasets<a class="anchor-link" href="#STEP-2:-Create-Minari-datasets">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Congratulations! You have created your first Minari dataset. Take a look at <code>src/offline_rl/data</code>.</strong></p>
 </div>
 </div>
 </div>
@@ -7614,15 +7551,11 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h3><ul>
-<li><p>Off-policy methods are strong candidates for offline RL. They assume a replay buffer, and if they implement a dynamic programming approach, they are suited to combine pieces of different trajectories into a new, better one.</p>
-</li>
-<li><p>However, they suffer from the overestimation problem when applied to data, which can cause the algorithm to easily go out of distribution.</p>
-</li>
-</ul>
+<h2 id="STEP-3:-Feed-dataset-to-Tianshou-ReplayBuffer">STEP 3: Feed dataset to Tianshou ReplayBuffer<a class="anchor-link" href="#STEP-3:-Feed-dataset-to-Tianshou-ReplayBuffer">¶</a></h2>
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7630,21 +7563,18 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Let's go to the exercises in nb_95</strong></p>
+<p><strong>Let's give a look to the collected 2d grid world data</strong></p>
+<p><strong>Useful information:</strong></p>
+<p>In our grid world environment, the agent's position is represented as $(x_1, x_2)$, with $x_1/x_2$ the vertical/horizontal coordinates. Observations are represented as a one-hot encoded vector of dimensions $x_1 \times x_2$, for example, a 64-dimensional vector in an 8x8 grid,</p>
+<p>The action is represented by an integer in the range of [0, 1, 2, 3], each indicating a direction:</p>
+<pre><code>0: (-1, 0) - UP
+1: (1, 0) - DOWN
+2: (0, -1) - LEFT
+3: (0, 1) - RIGHT</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Addressing-out-of-distribution-issues">Addressing out of distribution issues<a class="anchor-link" href="#Addressing-out-of-distribution-issues">¶</a></h2>
-</div>
-</div>
-</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7652,521 +7582,8 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Overview">Overview<a class="anchor-link" href="#Overview">¶</a></h3><p><strong>The idea is to constraint the learned policy "to be close" to the behavioral one while still introducing a controlled distributional shift to enhance the policy without going out of distribution. This balancing act is a significant challenge and a focus of ongoing RL research.</strong></p>
-<img alt="KL divergence" src="_static/images/nb_94_distributional_shift.png" width="40%"/>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In other words, <strong>you want the learned and behavioral policies to differ on $D$; for example, we don't want to exclude state-action pairs that may appear infrequently (few expert data) but could lead to higher-reward trajectories</strong>, especially considering that these states may likely appear during inference (see figs. a-b).</p>
-<img alt="KL divergence" src="_static/images/nb_94_ood_examples.png" width="80%"/>
-<p>But at the same time, <strong>we also want the policies to be close enough near to o.o.d. regions for the reasons already discussed</strong> (fig-c).</p>
-<p><strong>Note</strong>: This type of control over missing and o.o.d. data is something that cannot be achieved with imitation learning.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To attain the aforementioned goals, offline RL algorithms can be classified into three primary categories:</p>
-<p><strong>I - Policy constraint</strong></p>
-<p><strong>II - Policy Regularization</strong></p>
-<p><strong>III - Importance sampling</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="I---Policy-constraint-methods">I - Policy constraint methods<a class="anchor-link" href="#I---Policy-constraint-methods">¶</a></h3><p>One option we have to encourage to copy the expert knowledge in the data but restrict undesired o.o.d. situations is to constraint the learned policy to mimic the right behavior observed in the data.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="a)-Non-implicit-or-Direct">a) Non-implicit or Direct<a class="anchor-link" href="#a)-Non-implicit-or-Direct">¶</a></h4><p><strong>We have access to the behavior policy, $\bf \pi_\beta$</strong></p>
-<p>Since we already have $\pi_\beta$, we can constrain the learned and behavioral policy using:</p>
-<p>\begin{equation}
-D_{KL}(\pi(.|s)||\pi_{\beta}(.|s)) \leq \epsilon
-\label{dk_1}
-\end{equation}</p>
-<div style="margin-top: 20px;">
-<div style="display: flex; justify-content: space-between;">
-<div style="width: 49%;">
-<img alt="KL divergence" src="_static/images/96_KL_divergence.png" width="100%"/>
-<div class="slide title"> Fig.1: KL Divergence </div>
-</div>
-<div style="width: 10%;"></div> <!-- Empty div for space in the middle -->
-<div style="width: 40%;">
-<img alt="Your Second Image" src="_static/images/96_DKL_2.png" width="100%"/>
-</div>
-</div>
-</div>
-<p>where the Kullback-Leibler divergence, $D_{KL}$, is defined as:</p>
-<p>$$
-D_{KL}(\pi(.|s)||\pi_{\beta}(.|s)) = \sum_a \pi(a|s) log \frac{\pi(a|s)}{\pi_{\beta}(a|s)} 
-\label{dkl_2}
-$$</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="KL divergence" src="_static/images/96_policy_constraint_DKL.png" width="60%"/>
-<div class="slide title"> Fig.2: DKL divergence's effect on out-of-distribution data </div>
-<p><strong>To summarize</strong>: The $D_{KL}$ divergence discourages undesired o.o.d actions, as in case (b), yet encourages important o.o.d actions, as in case (a), crucial for enhancing the learned policy. This ensures that state distributions $d_{\pi}(s)$ and $d_{\pi_{\beta}}(s)$ are close around a given state $s$, so the distributional shift won't be too large. In contrast, case (b) will typically exhibits a large distributional shift.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Moreover, actions such as $a_4$, in fig.2a, may guide our agent to highly rewarding regions, as illustrated in the figure below.</p>
-<img alt="KL divergence" src="_static/images/96_critical_action_states.png" width="50%"/>
-<div class="slide title"> Fig.3: Critical actions may appear infrequently in the collected data but are crucial for finding the optimal policy. </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>These methods typically use the evaluation-improvement approach, introduced before, plus the $D_{KL}$ constraint</strong>:</p>
-<p>$$
-{\hat Q}^{k+1} \leftarrow L_1 = \arg \min_Q \mathbb{E}_{(s,a,s')\sim D} \left[\left( Q_\phi(s, a) - r(s, a) - \gamma \mathbb{E}_{a' \sim\pi_\theta(a'|s')}[Q_\phi(s', a')] \right)^2 \right]  \tag{Evaluation}
-$$</p>
-<p>$$
-\pi_{k+1} \leftarrow L_2 = \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi_\theta(a|s)} Q^{k+1}_\phi(s, a) \right] \tag{Improvement}
-$$</p>
-<p>$$
-\begin{equation}
-D_{KL}(\pi(.|s), \pi_{\beta}(.|s)) \leq \epsilon.
-\tag{Constraint}
-\end{equation}
-$$</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Technical comment</strong>: We could incorporate this constraint as a Lagrange multiplier, or sometimes it is absorbed in the evaluation and improvement steps:</p>
-<p>$$
-{\hat Q}^{\pi}_{k+1} \leftarrow \arg \min_Q \mathbb{E}_{(s,a,s')\sim D} \left[\left( Q(s, a) -  r(s, a) + \gamma \mathbb{E}_{a' \sim\pi_k(a'|s')}[{\hat Q}^{\pi}_k(s', a')] -\alpha D_{KL}(\pi_k(\cdot|s'), \pi_\beta(\cdot|s')) \right)^2 \right]
-$$</p>
-<p>$$
-\pi_{k+1} \leftarrow \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi(a|s)} Q^{\hat{\pi}_{k+1}}(s, a) -\alpha D_{KL}(\pi_k(\cdot|s), \pi_\beta(\cdot|s)) \right] \\
-$$</p>
-<p>that produces similar results, with the advantage that is much easier to implement from a technical point of view.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>But what happens if we need to deviate considerably from the behavior policy, as can happens in realistic situations where the data collected is far from optimal?</strong>.</p>
-<p>Let's  analize the simple example in the fig. below:</p>
-<img alt="offline_rl_4" src="_static/images/96_support_policy_constraint.png" width="70%"/>
-<p>where all data is in-distribution. Still the $D_{KL}$ constraint distribution will copy the bad behavior of $\pi_b$ .</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>What about constraining the policy support? In other words, <strong>we don't focus on the probability of action $a$ within the dataset, but only on whether that action is included in the dataset</strong>.</p>
-<img alt="offline_rl_4" src="_static/images/policy_constraint_vs_support.png" width="40%"/>
-<div class="slide title"> Fig.4: distributional vs. support policy constraint </div>
-<p><strong>This is usually a good idea: Just constrain only allowed actions and let the algorithm find the action probabilities through the evaluation-improvement equations.</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Summary</strong></p>
-<p><strong>Direct constraint methods assume you have access to the behavior policy.</strong></p>
-<p>They are typically of two kinds:</p>
-<ul>
-<li><p>Constraint on distribution: easy to implement and generally effective, but they can sometime be too conservative.</p>
-</li>
-<li><p>Constraint on support: a good choice when the behavior policy deviates significantly from optimality.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="b)-Implicit">b) Implicit<a class="anchor-link" href="#b)-Implicit">¶</a></h4><p><strong>We don't need $\pi_\beta$, and we can work directly with our data $D$</strong>. Useful in complex high dimensional spaces where the BC of the behavioral policy is not accurate.</p>
-<p>First we assume that we have $\pi_\beta$ (we will integrate it out later). <strong>We maximize the difference reward</strong>:</p>
-<p>$$
-\begin{align}
-max_\pi \eta(\pi) &amp;= max_\pi ( J(\pi) - J(\pi_\beta) ) \qquad \hbox{with} \quad J (\pi) = \mathbb{E}_{\tau \sim \pi}  \left[ \sum_{t = 0}^{\infty} \gamma^t r (s_t, a_t) \right] \\ \text{s.t.} \quad &amp;D_{KL}(\pi(\cdot|s) || \pi_\beta(\cdot|s) ) \leq \epsilon
-\tag{2}
-\end{align}
-$$</p>
-<p>so as higher $\eta(\pi)$ the better $\pi$ .</p>
-<p><strong>Note</strong>: This is a slightly different idea than what we usually follow to find the policy that maximizes the discounted reward.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It can be shown that (2) can be written as:</p>
-<p>$
-\begin{equation}
-max_\pi \eta(\pi) = max_\pi \mathbb{E}_{s \sim d^{\pi}(s)} \mathbb{E}_{a \sim \pi(a|s)} [A^{\pi_\beta}(s, a)] \\ \text{s.t.} \quad D_{KL}(\pi(\cdot|s) || \pi_\beta(\cdot|s) ) \leq \epsilon
-\tag{3}
-\end{equation}
-$</p>
-<p>with $A^{\pi_\beta}(s, a) = Q^{\pi_\beta}(s, a) -V^{\pi_\beta}(s)$ the Advantage function.</p>
-<p>As we will shown next, eq.3 will give us the optimal policy.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's try to understand eq.3:</p>
-<img alt="offline_rl_4" src="_static/images/96_difference_reward.png" width="80%"/>
-<div class="slide title"> Figure 5: Optimal policy from difference reward maximization.</div>
-<p><strong>I summary, eq.3 implies finding a policy $\pi(a|s)$ that generates state-action pairs $(s_0,a_0)$ (constrained through the $D_{KL}$ to be close to the dataset) that lead to trajectories in our dataset with maximum reward. In other words, we are trying to find the optimal policy within the data.</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's jump to the final solution of eq.3. If you are interested in more mathematical details see the slide below. The optimal policy, $\hat{\pi}_\theta (a|s)$, is:</p>
-<p>$$
-\hat{\pi}_\theta (a|s) \leftarrow
-\arg\max_{\pi_\theta} \mathbb{\sum}_{(s,a)\sim D} \left[ \frac{1}{Z(s)} \log \pi_\theta(a|s) \exp\left(\frac{1}{\lambda} A^{D}(s, a)\right) \right]
-\label{AWR}
-\tag{4}
-$$</p>
-<p><strong>Interpretation: the maximization operation in eq.4 implies that $\pi_\theta(a|s)$ will be maximum in state-action pairs within or close to $D$, but only if $(s,a)$ brings the agent to a high reward region, i.e., if $\exp\left(\frac{1}{\lambda} A^{D}(s, a)\right)$ (or $A^{D}(s, a)$) is high.</strong></p>
-<p>This is in perfect agreement with out previous interpretation in fig.5.</p>
-<p><strong>Finally, note that to compute equation 3, we need $Q^{\pi_\beta}(s, a)$, so we could use the dynamic programming evaluation step introduced before, where eq.4, plays the role of the improvement step.</strong>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>ALERT!! : Only if you are interested in the math:</strong></p>
-<p>It is easy to see that the solution to eq.3 is:</p>
-<p>$
-\pi^*(a|s) = \frac{1}{Z(s)} \pi_\beta(a|s) \exp\left(\frac{1}{\lambda} A^{\pi_\beta}(s, a)\right)  \quad \text{with } \lambda \in R
-\tag{4}.
-$</p>
-<p>were $\lambda$ comes from a Lagrange multiplier that take into accounts the $D_{KL}$ constraint.</p>
-<p><strong>Again eq.4 means that $\pi^*(a|s)$ is given by the probability of finding $(s,a)$ in the dataset (i.e. $\pi_\beta(a|s)$) times the probability that $(s,a)$ drives the agent to a high cumulative reward ($~ \exp\left(\frac{1}{\lambda} A^{\pi_\beta}(s, a)\right)$).</strong></p>
-<p>Finally, if we approximate out theoretical optimal policy $\pi^*(a|s)$ by a DNN $\pi_\theta (a|s)$, we can use an SVI approach:</p>
-<p>$$
-\pi_\theta (a|s) = argmin_{\pi_\theta} \mathbb{E}_{s \sim d\pi_\beta(s)} \left[ D_{KL}(\pi^*(\cdot|s) \, \Vert \, \pi_\theta(\cdot|s)) \right] = \\
-\arg\max_{\pi_\theta} \mathbb{E}_{s\sim d\pi_\beta(s)}\mathbb{E}_{a\sim\pi_\beta(a|s)} \left[ \frac{1}{Z(s)} \log \pi_\theta(a|s) \exp\left(\frac{1}{\lambda} A^{\pi_\beta}(s, a)\right) \right]
-\tag{5}
-$$</p>
-<p>where the sampling is through $\pi_\beta$ that we can replace by the collected dataset:</p>
-<p>$$
-\pi_\theta (a|s) =
-\arg\max_{\pi_\theta} \mathbb{\sum}_{(s,a)\sim D} \left[ \frac{1}{Z(s)} \log \pi_\theta(a|s) \exp\left(\frac{1}{\lambda} A^{D}(s, a)\right) \right]
-\tag{6}
-$$</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Summary:">Summary:<a class="anchor-link" href="#Summary:">¶</a></h4><ul>
-<li><p>Policy constraint methods are able to fill gaps in the collected data to guide the agent to high-reward regions while also discouraging o.o.d. behavior. This can be achieved by constraining the density or the support of the policy, if you have access to the behavior policy. If you don't, methods like implicit policy constraints could be the way to go.</p>
-</li>
-<li><p>Policy constraint methods are powerful, but they can often be too pessimistic, which is undesirable.
-For example, if we know that a certain state has all actions yielding zero reward, we should not constrain the
-policy in this state, as could affect our neural network approximator.</p>
-</li>
-</ul>
-<p><strong>An alternative approach to avoid o.o.d actions without directly constraining the policies is to control o.o.d behavior from a Q-function perspective.</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="II---Policy-Regularization-methods">II - Policy Regularization methods<a class="anchor-link" href="#II---Policy-Regularization-methods">¶</a></h3><p><strong>This approach involves regularizing the value function directly, aiming to prevent overestimation, especially for actions that fall outside the distribution seen during training</strong></p>
-<p>Advantages:</p>
-<ul>
-<li><p><strong>Applicable to different RL methods, including actor-critic and Q-learning methods.</strong></p>
-</li>
-<li><p><strong>Doesn't necessitate explicit behavior policy modeling.</strong></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="offline_rl_4" src="_static/images/96_CQL_1.png" width="100%"/>
-<div class="slide title"> Fig.6: Policy regularization approach </div>
-<p><strong>Main idea: introduce a new policy $\mu(a|s)$ that attempts to find the actions $a$ maximizing the DNN $Q_\phi$, while simultaneously minimizing $Q_\phi$ within the $\phi$ parameter space. This effect is particularly crucial for o.o.d. actions, which are generally overestimated, as previously observed.</strong></p>
-<p><strong>The policy $\mu$ doesn't necessarily have to be proportional to $\pi(a|s)$, but it should aim to maximize Q(s,a).</strong></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>These are some popular offline RL algorithms, but the list is longer:</p>
-<img alt="offline_rl_4" src="_static/images/nb_94_popular_offline_rl_algorithms.png" width="100%"/>
-<p>It's worth noting that most of these algorithms fall into the categories we've already discussed, namely policy constraint and policy optimization methods</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Appendix:-Short-review-of-some-popular-offline-RL-algorithms">Appendix: Short review of some popular offline RL algorithms<a class="anchor-link" href="#Appendix:-Short-review-of-some-popular-offline-RL-algorithms">¶</a></h1>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">¶</a></h2><p>In this notebook, we will explore several key algorithms that aim to address distributional shift issues within offline reinforcement learning. It's worth noting that the field of offline RL is evolving rapidly, and this list is by no means exhaustive. Many of the concepts and strategies employed by these algorithms find applications and improvements in various other approaches.</p>
-<p>A common approach followed by many algorithms in offline RL involves an actor-critic methodology. Within this framework, there is an iterative process of evaluation and improvement, characterized by:</p>
-<p>$$
-\begin{equation}
-{\hat Q}^{\pi}_{k+1} \gets \arg \min_Q \mathbb{E}_{s,a \sim \mathcal{D}} \Big[\big(Q(s,a) - \mathcal{B}^{\pi}_k Q(s,a)\big)^2\Big].
-\tag{Evaluation}
-\end{equation}
-$$</p>
-<p>$$
-\begin{equation}
-\mathcal{B}^{\pi}Q = r + {\gamma}\mathbb{E}_{s' \sim D, a' \sim \pi}Q(s',a') 
-\tag{Bellman backup op.}
-\end{equation}
-$$</p>
-<p>$$
-\begin{equation}
-\pi_{k+1} \leftarrow \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi(a|s)} Q^{\hat{\pi}}_{k+1}(s, a) \right] \tag{Improvement}
-\end{equation}
-$$</p>
-<p>So the main idea is to modify the Evaluation/Improvement steps to improve the distributional shift problems.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Batch-Constrained-deep-Q-learning-(BCQ)-algorithm">Batch Constrained deep Q-learning (BCQ) algorithm<a class="anchor-link" href="#Batch-Constrained-deep-Q-learning-(BCQ)-algorithm">¶</a></h2><p>The main idea is pictured in the figure below.</p>
-<img alt="offline_rl_4" src="_static/images/97_BCQ_algo_1.png" width="200%"/>
-<div class="slide title"> Fig.5: BCQ approach to offline RL </div>
-<p>In BCQ, the policies $\pi$ and $\pi_\beta$ are not constrained by the $D_{KL}$ divergence, but we still ensure that $\pi(s)$ generates similar actions to $\pi_\beta(s)$ through a generative model, in this case, a Variational Autoencoder (VAE), $G_\omega$:</p>
-<p>$$
-\pi(s) = \arg\max_{a_i} Q_\theta(s, a_i),
-\\ \{a_i \sim G_\omega(s)\}_{i=1}^n
-\tag{7}
-$$</p>
-<p>Therefore, this method falls under the direct policy constraint approach discussed earlier.</p>
-<p>The BCQ algorithm uses a clipped Double Deep Q-Learning (clipped-DDQ) approach to compute the Q-values:</p>
-<p>$$
-L(\theta_i, D) = \mathbb{E}_{ s,a,r,s' \sim D} \left[  Q_{\theta_i}(s,a) - y(r,s') \right]
-$$</p>
-<p>with</p>
-<p>$$
-y(r,s') = r + \gamma max_{a_i} min_{i=1,2} Q_{\theta_i, targ} (s', a_i)
-$$</p>
-<p>The minimum is taken to avoid the overestimation of Q-values, an issue that also occurs in these kinds of methods in online RL. In offline RL, as we saw, o.o.d. actions are the ones that typically produce such overestimations. Therefore, clipped-DDQ also introduces control over this issue at the Q-value level, achieving a similar effect to what policy regularization methods aim for with a lower bound on Q-values.</p>
-<p><strong>A few technical details</strong>:</p>
-<p>The actions in eq. 7 are clipped with some noise $\epsilon$, hence the name clipped, as this also helps to avoid overestimation of Q-values.</p>
-<p>$$
-a \rightarrow clip [a + clip(\epsilon, -c, c), a_{low}, a_{high}]
-$$</p>
-<p>We allow actions with high Q-values to introduce some uncertainty, helping the algorithm explore regions of lower reward to avoid overestimation effects.</p>
-<p>Finally, as running a VAE during training can be computationally expensive, the algorithm introduces a perturbation model $\xi_\phi(s, a_i, \Phi)$, which outputs an adjustment to an action $a$ in the range $[-\Phi, \Phi]$. Therefore, eq.7 becomes:</p>
-<p>$$
-\pi(s) = \arg\max_{a_i + \xi_\phi(s, a_i, \Phi)} Q_\theta(s, a_i + \xi_\phi(s, a_i, \Phi)),
-\\ \{a_i \sim G_\omega(s)\}_{i=1}^n
-$$</p>
-<p>Note that if $\Phi=0$ and $n=1$ the policy will resemble behavioral cloning.
-On the opposite side if d $\Phi \rightarrow a_{max} - a_{min}$ and $n \rightarrow \infty$, then the algorithm approaches Q-learning, as the policy begins to greedily maximize the value function over the entire action space.</p>
-<p><strong>Pros</strong>: As it learns how to generate new actions not included in the dataset, it is suitable for small datasets and for unbalanced sets where a few unrepresented actions could be important for the task to be solved.</p>
-<p><strong>Cons</strong>:  Since BCQ generates actions from a VAE, if the dataset used to train it underrepresents some important actions, the VAE may struggle to generate meaningful actions around those states, making the discovery of new or unconventional actions difficult. This is one of the limitations of constrained policy approaches.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Conservative-Q-Learning-(CQL)-algorithm">Conservative Q-Learning (CQL) algorithm<a class="anchor-link" href="#Conservative-Q-Learning-(CQL)-algorithm">¶</a></h2><p>CQL follows a pessimistic approach by considering a lower bound of the Q-value. In the paper the authors shown that the solution of:</p>
-<p>$\hat{Q}^{k+1}_{\text{CQL}} \gets \hbox{argmin}_Q \left[ \color{red} {\alpha\big(\mathbb{E}_{s \sim \mathcal{D}, a \sim \mu}[Q(s,a)] - \mathbb{E}_{s,a \sim \mathcal{D}}[Q(s,a)]\big)} + \frac{1}{2} \mathbb{E}_{s,a \sim \mathcal{D}} \Big[\big(Q(s,a) - \mathcal{B}^{\pi}Q(s,a)\big)^2\Big] \right].$</p>
-<p>for $\mu = \pi$ is a lower bound for the Q value.</p>
-<p>The nice thing about this method is that it can be applied to any Actor Critic method in a few lines of code.</p>
-<p>CQL Focuses on <strong>conservative value estimation</strong> to provide lower bounds on the expected return of a policy. Aims to reduce overestimation bias and ensure that the policy remains within a safe region of the state-action space. Achieves safe exploration by constructing action sets that cover a broader range of state-action pairs.
-Well suited for scenarios where safety is a top priority, as it <strong>reduces the risk of catastrophic actions</strong>.</p>
-<p>Note that BCQ could be better to discover novel actions and to use the collected data more efficiently but may not guarantee complete safety!.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Implicit-Q-Learning-(IQL)-algorithm">Implicit Q-Learning (IQL) algorithm<a class="anchor-link" href="#Implicit-Q-Learning-(IQL)-algorithm">¶</a></h2><p>This is another clever idea to avoid going out of distribution. Let's revisit the ideas for evaluation improvement, assuming that we only operate with state-action pairs from the dataset in a SARSA-style approach, i.e.:</p>
-<p>$$
-{\hat Q}_{k+1} \leftarrow \arg \min_Q \mathbb{E}_{(s,a,s',a')\sim D} \left[\left( Q(s, a) -  r(s, a) + \gamma{\hat Q}_k(s', a')  \right)^2 \right]
-$$</p>
-<p>$$
-\pi_{k+1} \leftarrow \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi(a|s)} Q^{\hat{\pi}_{k+1}}(s, a)  \right] \\
-$$</p>
-<p>This is indeed a valid approach. It's important to note that running the evaluation-improvement loop makes sense only once. During evaluation, we compute the $Q$-values of the behavior policy and derive the optimal policy based on those $Q$-values in the improvement step. Further iterations would be futile since we are limited to the fixed dataset.</p>
-<p>However, this idea often falls short in finding an optimal policy for many real-world problems. Intuitively, if our data is suboptimal, the Q-values derived from that data will also be suboptimal.</p>
-<p>The core principle of IQL is to utilize a pessimistic Q-value lower bound during evaluation, similar to policy regularization, while also ensuring consistency with in-distribution data. This strategy enables a multi-step process, facilitating multiple evaluation-improvement iterations. With each iteration, a new estimate for Q(s,a) is derived, encouraging a deeper exploration of the Q-functions and enabling the capture of broader correlations.</p>
-<img alt="offline_rl_4" src="_static/images/96_one_step_vs_multiple_steps.png" width="80%"/>
-<div class="slide title"> Fig.6: one vs multiple step approaches.  </div>
-<p>These are the main steps involved in the IQL approach:</p>
-<p>$$L_V(\psi) = E_{(s,a)\sim D}[L_2^{\tau}(Q_{\hat{\theta}}(s, a) - V_{\psi}(s))]$$</p>
-<p>$$L_Q(\theta) = E_{(s,a,s') \sim D}\left[(r(s, a) + \gamma V_{\psi}(s') - Q_{\theta}(s, a))^2\right]$$</p>
-<p>and for the policy improvement step, it uses an advantage weighted regression:</p>
-<p>$$L_\pi(\phi) = E_{(s,a)\sim D} \left[\exp(\beta(Q_{\hat{\theta}}(s, a) - V_{\psi}(s))) \log \pi_{\phi}(a|s)\right]
-$$</p>
-<p>similar to eq.4 . The lower bound used here is the 'expectile' shown in the figure below.</p>
-<img alt="offline_rl_4" src="_static/images/96_expectile.png" width="80%"/>
-<div class="slide title"> Fig.7: Expectile of a two dimenstional random variable.  </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Q-Transformer">Q-Transformer<a class="anchor-link" href="#Q-Transformer">¶</a></h2><p>Adapts the bellman equations to deal with a transformer architecture: <a href="https://qtransformer.github.io/">paper</a> and <a href="https://qtransformer.github.io/">blog</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="References">References<a class="anchor-link" href="#References">¶</a></h1><p><a href="https://arxiv.org/pdf/1502.05477.pdf">Schulman et al. 2017 - Trust Region Policy Optimization</a></p>
-<p><a href="https://arxiv.org/pdf/2006.04779.pdf">Kumar et al. 2020 - Conservative Q-Learning for Offline Reinforcement Learning</a></p>
-<p><a href="https://arxiv.org/pdf/2005.01643.pdf"> Levine et al. 2021 - Offline Reinforcement Learning: Tutorial, Review,
-and Perspectives on Open Problems </a></p>
-<p><a href="https://arxiv.org/abs/1910.00177">Peng et al. 2019 - Simple and Scalable Off-Policy Reinforcement Learning</a></p>
-<p><a href="https://arxiv.org/abs/2006.09359">Nair et al. '2020 - AWAC: Accelerating Online Reinforcement Learning with Offline Datasets</a></p>
+<h2 id="References">References<a class="anchor-link" href="#References">¶</a></h2><p><a href="https://arxiv.org/abs/2004.07219"> [Fu.Justin et. al.] D4RL: Datasets for Deep Data-Driven Reinforcement Learning</a></p>
+<p><a href="https://minari.farama.org/main/content/basic_usage/"> MINARI: A dataset API for Offline Reinforcement Learning </a></p>
 </div>
 </div>
 </div>
