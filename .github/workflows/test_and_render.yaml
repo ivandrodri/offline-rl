@@ -60,8 +60,7 @@ jobs:
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
             ivanrodri2020/offlinerl:latest \
-            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_input=True --TemplateExporter.exclude_output=True --HTMLExporter.template=lab --embed-images=True *.ipynb"
-
+            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_input=True --TemplateExporter.exclude_output=True --HTMLExporter.template=lab --embed-images *.ipynb"
 
       - name: Create index.html
         run: |
