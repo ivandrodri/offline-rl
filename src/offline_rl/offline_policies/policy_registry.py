@@ -1,23 +1,12 @@
-from enum import Enum
+from enum import Enum, StrEnum
 
-from offline_rl.offline_policies.bcq_continuous_policy import (
-    bcq_continuous_default_config, create_bcq_continuous_policy_from_dict)
-from offline_rl.offline_policies.bcq_discrete_policy import (
-    bcq_discrete_default_config, create_bcq_discrete_policy_from_dict)
-from offline_rl.offline_policies.cql_continuous_policy import (
-    cql_continuous_default_config, create_cql_continuous_policy_from_dict)
-from offline_rl.offline_policies.cql_discrete_policy import (
-    cql_discrete_default_config, create_cql_discrete_policy_from_dict)
-from offline_rl.offline_policies.dagger_torcs_policy import dagger_torcs_default_config, \
-    create_dagger_torcs_policy_from_dict
-from offline_rl.offline_policies.dqn_policy import (
-    create_dqn_policy_from_dict, dqn_default_config)
-from offline_rl.offline_policies.il_policy import (
-    create_il_policy_from_dict, il_default_config)
-from offline_rl.offline_policies.il_torcs_policy import il_torcs_default_config, \
-    create_il_torcs_policy_from_dict
-from offline_rl.offline_policies.ppo_policy import (
-    create_ppo_policy_from_dict, ppo_default_config)
+from offline_rl.offline_policies.bcq_continuous_policy import BCQContinuousPolicyModel
+from offline_rl.offline_policies.bcq_discrete_policy import BCQDiscretePolicyModel
+from offline_rl.offline_policies.cql_continuous_policy import CQLContinuousPolicyModel
+from offline_rl.offline_policies.cql_discrete_policy import CQLDiscretePolicyModel
+from offline_rl.offline_policies.dqn_policy import DQNPolicyModel
+from offline_rl.offline_policies.il_policy import ILPolicyModel
+from offline_rl.offline_policies.ppo_policy import PpoPolicyModel
 
 
 class CallableEnum(Enum):
@@ -31,40 +20,38 @@ class PolicyType(str, Enum):
     offpolicy = "offpolicy"
 
 
-class PolicyName(str, Enum):
+class RLPolicies(StrEnum):
     bcq_discrete = "bcq_discrete"
     cql_continuous = "cql_continuous"
     imitation_learning = "imitation_learning"
-    imitation_learning_torcs = "imitation_learning_torcs"
-    dagger_torcs = "dagger_torcs"
     bcq_continuous = "bcq_continuous"
     cql_discrete = "cql_discrete"
     dqn = "dqn"
     ppo = "ppo"
 
 
-class DefaultPolicyConfigFactoryRegistry(CallableEnum):
-    bcq_discrete = bcq_discrete_default_config
-    cql_continuous = cql_continuous_default_config
-    imitation_learning = il_default_config
-    bcq_continuous = bcq_continuous_default_config
-    cql_discrete = cql_discrete_default_config
-    dqn = dqn_default_config
-    ppo = ppo_default_config
-    imitation_learning_torcs = il_torcs_default_config
-    dagger_torcs = dagger_torcs_default_config
+class RLPolicyFactory(StrEnum):
+    bcq_discrete = RLPolicies.bcq_discrete
+    cql_continuous = RLPolicies.cql_continuous
+    imitation_learning = RLPolicies.imitation_learning
+    bcq_continuous = RLPolicies.bcq_continuous
+    cql_discrete = RLPolicies.cql_discrete
+    dqn = RLPolicies.dqn
+    ppo = RLPolicies.ppo
 
-
-class PolicyFactoryRegistry(CallableEnum):
-    bcq_discrete = create_bcq_discrete_policy_from_dict
-    cql_continuous = create_cql_continuous_policy_from_dict
-    imitation_learning = create_il_policy_from_dict
-    bcq_continuous = create_bcq_continuous_policy_from_dict
-    cql_discrete = create_cql_discrete_policy_from_dict
-    dqn = create_dqn_policy_from_dict
-    ppo = create_ppo_policy_from_dict
-    imitation_learning_torcs = create_il_torcs_policy_from_dict
-    dagger_torcs = create_dagger_torcs_policy_from_dict
-
-
-
+    def get_policy(self):
+        match self:
+            case self.bcq_discrete:
+                return BCQDiscretePolicyModel()
+            case self.bcq_continuous:
+                return BCQContinuousPolicyModel()
+            case self.cql_continuous:
+                return CQLContinuousPolicyModel()
+            case self.cql_discrete:
+                return CQLDiscretePolicyModel()
+            case self.dqn:
+                return DQNPolicyModel()
+            case self.imitation_learning:
+                return ILPolicyModel()
+            case self.ppo:
+                return PpoPolicyModel()

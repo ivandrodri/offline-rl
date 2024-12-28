@@ -2,6 +2,8 @@ import math
 
 import numpy as np
 
+# ToDo: code taken from https://github.com/damat-le/gym-simplegrid.git . Need cleaning/Refactoring.
+
 # Size in pixels of a tile in the full-scale human view
 TILE_PIXELS = 32
 
@@ -16,12 +18,12 @@ COLORS = {
     "black": np.array([0, 0, 0]),
 }
 
-COLOR_NAMES = sorted(list(COLORS.keys()))
+COLOR_NAMES = sorted(COLORS.keys())
 
 # Used to map colors to integers
 COLOR_TO_IDX = {"red": 0, "green": 1, "blue": 2, "purple": 3, "yellow": 4, "grey": 5, "black": 6}
 
-IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys()))
+IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys(), strict=True))
 
 # Map of object type to integers
 OBJECT_TO_IDX = {
@@ -39,7 +41,7 @@ OBJECT_TO_IDX = {
     "colored_tile": 11,
 }
 
-IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys()))
+IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys(), strict=True))
 
 # Map of state names to integers
 STATE_TO_IDX = {
@@ -62,25 +64,17 @@ DIR_TO_VEC = [
 
 
 def downsample(img, factor):
-    """
-    Downsample an image along both dimensions by some factor
-    """
-
+    """Downsample an image along both dimensions by some factor."""
     assert img.shape[0] % factor == 0
     assert img.shape[1] % factor == 0
 
     img = img.reshape([img.shape[0] // factor, factor, img.shape[1] // factor, factor, 3])
     img = img.mean(axis=3)
-    img = img.mean(axis=1)
-
-    return img
+    return img.mean(axis=1)
 
 
 def fill_coords(img, fn, color):
-    """
-    Fill pixels of an image with coordinates matching a filter function
-    """
-
+    """Fill pixels of an image with coordinates matching a filter function."""
     for y in range(img.shape[0]):
         for x in range(img.shape[1]):
             yf = (y + 0.5) / img.shape[0]
@@ -92,6 +86,13 @@ def fill_coords(img, fn, color):
 
 
 def rotate_fn(fin, cx, cy, theta):
+    """:param fin:
+    :param cx:
+    :param cy:
+    :param theta:
+    :return:
+    """
+
     def fout(x, y):
         x = x - cx
         y = y - cy
@@ -105,6 +106,13 @@ def rotate_fn(fin, cx, cy, theta):
 
 
 def point_in_line(x0, y0, x1, y1, r):
+    """:param x0:
+    :param y0:
+    :param x1:
+    :param y1:
+    :param r:
+    :return:
+    """
     p0 = np.array([x0, y0])
     p1 = np.array([x1, y1])
     dir = p1 - p0
@@ -178,19 +186,14 @@ def point_in_triangle(a, b, c):
 
 
 def highlight_img(img, color=(255, 255, 255), alpha=0.30):
-    """
-    Add highlighting to an image
-    """
-
+    """Add highlighting to an image."""
     blend_img = img + alpha * (np.array(color, dtype=np.uint8) - img)
     blend_img = blend_img.clip(0, 255).astype(np.uint8)
     img[:, :, :] = blend_img
 
 
 class WorldObj:
-    """
-    Base class for grid world objects
-    """
+    """Base class for grid world objects."""
 
     def __init__(self, type, color):
         assert type in OBJECT_TO_IDX, type
@@ -206,33 +209,32 @@ class WorldObj:
         self.cur_pos = None
 
     def can_overlap(self):
-        """Can the agent overlap with this?"""
+        """Can the agent overlap with this?."""
         return False
 
     def can_pickup(self):
-        """Can the agent pick this up?"""
+        """Can the agent pick this up?."""
         return False
 
     def can_contain(self):
-        """Can this contain another object?"""
+        """Can this contain another object?."""
         return False
 
     def see_behind(self):
-        """Can the agent see behind this object?"""
+        """Can the agent see behind this object?."""
         return True
 
     def toggle(self, env, pos):
-        """Method to trigger/toggle an action this object performs"""
+        """Method to trigger/toggle an action this object performs."""
         return False
 
     def encode(self):
-        """Encode the a description of this object as a 3-tuple of integers"""
+        """Encode the a description of this object as a 3-tuple of integers."""
         return (OBJECT_TO_IDX[self.type], COLOR_TO_IDX[self.color], 0)
 
     @staticmethod
     def decode(type_idx, color_idx, state):
-        """Create an object from a 3-tuple state description"""
-
+        """Create an object from a 3-tuple state description."""
         obj_type = IDX_TO_OBJECT[type_idx]
         color = IDX_TO_COLOR[color_idx]
 
@@ -265,7 +267,7 @@ class WorldObj:
         return v
 
     def render(self, r):
-        """Draw this object with the given renderer"""
+        """Draw this object with the given renderer."""
         raise NotImplementedError
 
 

@@ -42,6 +42,8 @@ virtualenv = [
     { version = "<20.16.4", markers = "sys_platform == 'win32'" },
 ]
 mujoco-py = "^2.1.2.14"
+pydantic = "^2.0"
+
 
 [tool.poetry.group.add1]
 optional = true
@@ -129,16 +131,20 @@ select = [
 ]
 ignore = [
     "SIM118", # Needed b/c iter(batch) != iter(batch.keys()). See https://github.com/thu-ml/tianshou/issues/922
+    #"SIM108", # Error if not ternary operation used
     "E501",   # line too long. black does a good enough job
     "E741",   # variable names like "l". this isn't a huge problem
     "B008",   # do not perform function calls in argument defaults. we do this sometimes
     "B011",   # assert false. we don't use python -O
     "B028",   # we don't need explicit stacklevel for warnings
     "D100", "D101", "D102", "D104", "D105", "D107", "D203", "D205", "D213", "D401", "D402",  # docstring stuff
-    "DTZ005",  # we don't need that
+    "DTZ005", "D103", # we don't need that
     # remaining rules from https://github.com/psf/black/blob/main/.flake8 (except W503)
     # this is a simplified version of config, making vscode plugin happy
-    "E402", "E501", "E701", "E731", "C408", "E203"
+    "E402", "E501", "E701", "E731", "C408", "E203",
+    "F841",
+    "G004", #Logging statement uses f-string
+    "RUF012", #Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 unfixable = [
     "F841",  # unused variable. ruff keeps the call, but mostly we want to get rid of it all

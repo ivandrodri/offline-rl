@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 
+# ToDo: Code taken from https://github.com/damat-le/gym-simplegrid.git. Cleaning/Refactoring needed.
+
 
 class Window:
-    """
-    Window to draw a gridworld instance using Matplotlib
-    """
+    """Window to draw a gridworld instance using Matplotlib."""
 
     def __init__(self):
         self.fig = None
@@ -32,10 +32,7 @@ class Window:
         self.fig.canvas.mpl_connect("close_event", close_handler)
 
     def show_img(self, img, caption, fps):
-        """
-        Show an image or update the image being shown
-        """
-
+        """Show an image or update the image being shown."""
         # If no image has been shown yet,
         # show the first image of the environment
         if self.imshow_obj is None:
@@ -55,25 +52,16 @@ class Window:
         plt.pause(1 / fps)
 
     def set_caption(self, text):
-        """
-        Set/update the caption text below the image
-        """
-
+        """Set/update the caption text below the image."""
         plt.xlabel(text)
 
     def reg_key_handler(self, key_handler):
-        """
-        Register a keyboard event handler
-        """
-
+        """Register a keyboard event handler."""
         # Keyboard handler
         self.fig.canvas.mpl_connect("key_press_event", key_handler)
 
     def show(self, block=True):
-        """
-        Show the window, and start an event loop
-        """
-
+        """Show the window, and start an event loop."""
         # If not blocking, trigger interactive mode
         if not block:
             plt.ion()
@@ -84,9 +72,6 @@ class Window:
         plt.show()
 
     def close(self):
-        """
-        Close the window
-        """
-
+        """Close the window."""
         plt.close()
         self.closed = True

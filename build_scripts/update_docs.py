@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-This script walks through the python source files and creates documentation in .rst format which can
+"""Script to walks through the python source files and creates documentation in .rst format which can
 then be compiled with Sphinx. It is suitable for a standard repository layout src/<library_name> as well as for
 a repo containing multiple packages src/<package_1>, ...,  src/<package_n>.
 
@@ -15,7 +14,6 @@ import logging
 import os
 import shutil
 from pathlib import Path
-from typing import Union
 
 log = logging.getLogger(os.path.basename(__file__))
 
@@ -31,7 +29,7 @@ _NOTEBOOKS_DIR = Path(__file__).parent.parent / "notebooks"
 _DOCS_ROOT = "docs"
 
 
-def get_exercises_rst_string(notebooks_dir: Union[str, os.PathLike] = _NOTEBOOKS_DIR):
+def get_exercises_rst_string(notebooks_dir: str | os.PathLike = _NOTEBOOKS_DIR):
     if isinstance(notebooks_dir, str):
         notebooks_dir = Path(notebooks_dir)
 
@@ -48,7 +46,8 @@ def get_exercises_rst_string(notebooks_dir: Union[str, os.PathLike] = _NOTEBOOKS
 
 
 def write_exercises_refs_rst(
-    notebooks_dir: Union[str, os.PathLike] = _NOTEBOOKS_DIR, docs_root=_DOCS_ROOT
+    notebooks_dir: str | os.PathLike = _NOTEBOOKS_DIR,
+    docs_root=_DOCS_ROOT,
 ):
     rst = get_exercises_rst_string(notebooks_dir)
     target_path = os.path.join(docs_root, "exercises.rst")
@@ -60,20 +59,19 @@ def write_exercises_refs_rst(
 def module_template(module_qualname: str):
     module_name = module_qualname.split(".")[-1]
     title = module_name.replace("_", r"\_")
-    template = f"""{title}
+    return f"""{title}
 {"="*len(title)}
 
 .. automodule:: {module_qualname}
    :members:
    :undoc-members:
 """
-    return template
 
 
 def package_template(package_qualname: str):
     package_name = package_qualname.split(".")[-1]
     title = package_name.replace("_", r"\_")
-    template = f"""{title}
+    return f"""{title}
 {"="*len(title)}
 
 .. automodule:: {package_qualname}
@@ -85,12 +83,11 @@ def package_template(package_qualname: str):
 
    {package_name}/*
 """
-    return template
 
 
 def index_template(package_name):
     title = package_name.replace("_", r"\_")
-    template = f"""{title}
+    return f"""{title}
 {"="*len(title)}
 
 .. automodule:: {package_name}
@@ -102,7 +99,6 @@ def index_template(package_name):
 
    *
 """
-    return template
 
 
 def write_to_file(content: str, path: str):
@@ -113,10 +109,9 @@ def write_to_file(content: str, path: str):
 
 
 def make_rst(src_root="src", docs_root=_DOCS_ROOT, clean=False, overwrite=False):
-    """
-    Creates/updates documentation in form of rst files for modules and packages.
+    """Creates/updates documentation in form of rst files for modules and packages.
     Does not delete any existing rst files if clean and overwrite are False.
-    This method should be executed from the project's top-level directory
+    This method should be executed from the project's top-level directory.
 
     :param src_root: path to project's src directory that contains all packages, usually src. Most projects will
         only need one top-level package, then your layout typically should be src/<library_name>.
@@ -165,7 +160,7 @@ def make_rst(src_root="src", docs_root=_DOCS_ROOT, clean=False, overwrite=False)
                             top_level_package_docs_dir,
                             base_package_relpath,
                             f"{dirname}.rst",
-                        )
+                        ),
                     )
                     log.info(f"Writing package documentation to {package_rst_path}")
                     write_to_file(package_template(package_qualname), package_rst_path)
@@ -179,7 +174,7 @@ def make_rst(src_root="src", docs_root=_DOCS_ROOT, clean=False, overwrite=False)
                             top_level_package_docs_dir,
                             base_package_relpath,
                             f"{base_name}.rst",
-                        )
+                        ),
                     )
                     if os.path.exists(module_rst_path) and not overwrite:
                         log.debug(f"{module_rst_path} already exists, skipping it")

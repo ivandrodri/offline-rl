@@ -1,43 +1,48 @@
 import os
+import pickle
+import random
 from importlib import resources
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any, Union
 
 import gymnasium as gym
 import matplotlib.pyplot as plt
 import minari
 import numpy as np
 import torch
+from IPython.display import display
+from ipywidgets import widgets
 from minari import EpisodeData
 from minari.storage import get_dataset_path
 from tianshou.data import Batch, ReplayBuffer
-import pickle
-import random
-
 from torch.utils.data import Dataset
-from IPython.display import display
-from ipywidgets import widgets
 
-
-def get_tianshou_root():
-    try:
-        # Replace "tianshou" with the name of the package/module you want to access
-        with resources.path("tianshou", "..") as tianshou_root:
-            return tianshou_root
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
+# ToDo: Refactor this file and clean the code
 
 
 def get_dataset_path_d4rl(dataset_id):
     """Get the path to a dataset main directory."""
+
+    def get_tianshou_root():
+        try:
+            # Replace "tianshou" with the name of the package/module you want to access
+            with resources.path("tianshou", "..") as tianshou_root:
+                return tianshou_root
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+
     datasets_path = os.environ.get("D4RL_DATASETS_PATH")
 
     if datasets_path is not None:
         file_path = os.path.join(datasets_path, "datasets", dataset_id)
     else:
         datasets_path = os.path.join(
-            get_tianshou_root(), dataset_id, "offline_data", ".d4rl", "datasets"
+            get_tianshou_root(),
+            dataset_id,
+            "offline_data",
+            ".d4rl",
+            "datasets",
         )
         file_path = os.path.join(datasets_path, dataset_id)
 
@@ -46,14 +51,17 @@ def get_dataset_path_d4rl(dataset_id):
 
 
 def state_action_histogram(
-    state_action_count: Dict[Any, int],
-    title: str = None,
+    state_action_count: dict[Any, int],
+    title: str | None = None,
     normalized=False,
     inset_pos_xy: bool = True,
-    new_keys_for_state_action_count_plot: list[Any] = None,
+    new_keys_for_state_action_count_plot: list[Any] | None = None,
 ):
-    keys = list(state_action_count.keys()) if new_keys_for_state_action_count_plot is None else (
-        new_keys_for_state_action_count_plot)
+    keys = (
+        list(state_action_count.keys())
+        if new_keys_for_state_action_count_plot is None
+        else (new_keys_for_state_action_count_plot)
+    )
     values = list(state_action_count.values())
     keys_str = [str(key) if key[1] == 0 else "" for key in keys]
 
@@ -79,10 +87,14 @@ def state_action_histogram(
         plt.title(title)
 
     if inset_pos_xy:
-        inset_text = f"state = (x,y) ~ x + y*grid_size  -  action: (0:UP, 1:DOWN, 2:LEFT, 3:RIGHT)"  # Modify this with your desired text
+        inset_text = "state = (x,y) ~ x + y*grid_size  -  action: (0:UP, 1:DOWN, 2:LEFT, 3:RIGHT)"  # Modify this with your desired text
 
-        plot_height = plt.gca().get_ylim()[1] - plt.gca().get_ylim()[0]  # Calculate the height of the plot
-        relative_distance = -0.95 * plot_height  # Adjust the relative distance (e.g., 10% of plot height)
+        plot_height = (
+            plt.gca().get_ylim()[1] - plt.gca().get_ylim()[0]
+        )  # Calculate the height of the plot
+        relative_distance = (
+            -0.95 * plot_height
+        )  # Adjust the relative distance (e.g., 10% of plot height)
 
         inset_x = 115.0  # Adjust the x-coordinate
         inset_y = min(values) - relative_distance
@@ -105,7 +117,7 @@ def extract_dimension(input: Union["gym.core.ObsType", "gym.core.ActType"]) -> i
         n = input.shape[0]
     else:
         raise ValueError(
-            "So far only observations or actions that are discrete or one-dim boxes are allowed"
+            "So far only observations or actions that are discrete or one-dim boxes are allowed",
         )
     return n
 
@@ -130,9 +142,9 @@ def one_hot_to_integer(one_hot_vector):
 
 
 def compare_state_action_histograms(
-    state_action_count_1: Dict[Any, int],
-    state_action_count_2: Dict[Any, int],
-    title: str = None,
+    state_action_count_1: dict[Any, int],
+    state_action_count_2: dict[Any, int],
+    title: str | None = None,
     normalized: bool = True,
     colors=("b", "r"),
 ):
@@ -194,7 +206,7 @@ def get_q_value_matrix(env, policy, gamma=0.99):
     visitation_mask = {key: False for key, _ in q_value_matrix.items()}
 
     policy_trajectory_reward = 0.0
-    for i in range(1):
+    for _i in range(1):
         done = False
         truncated = False
         state, _ = env.reset()
@@ -260,7 +272,7 @@ def delete_minari_data_if_exists(file_name: str, override_dataset=True):
     else:
         raise FileExistsError(
             f"A dataset with that name already exists in {data_set_expert_task_path}. "
-            f"Please delete it or turn 'OVERRIDE_DATA_SET' to True."
+            f"Please delete it or turn 'OVERRIDE_DATA_SET' to True.",
         )
 
 
@@ -271,12 +283,12 @@ def get_max_episode_steps_env(env: gym.Env) -> int:
             max_episode_steps = current_env.spec.max_episode_steps
             if max_episode_steps is not None:
                 return max_episode_steps
-            else:
-                raise ValueError(f"The environment doesn't have max_episode_steps.")
+            raise ValueError("The environment doesn't have max_episode_steps.")
         if hasattr(current_env, "env"):
             current_env = current_env.env
         else:
             break
+    return None
 
 
 def change_max_episode_steps_env(env: gym.Env, new_max_episode_steps: int):
@@ -294,7 +306,7 @@ def change_max_episode_steps_env(env: gym.Env, new_max_episode_steps: int):
 def _episode_data_lengths(episode: EpisodeData):
     obs = (
         episode.observations["observation"]
-        if isinstance(episode.observations, Dict)
+        if isinstance(episode.observations, dict)
         else episode.observations
     )
     lens_data = [
@@ -328,13 +340,13 @@ def load_buffer_minari(expert_data_task: str) -> ReplayBuffer:
     truncations_list = []
     next_observations_list = []
 
-    for i, episode in enumerate(dataset):
+    for _i, episode in enumerate(dataset):
         # For some data the len of the episode len data (observations, actions, etc.) is not the same
         common_len = _episode_data_lengths(episode)
 
         obs = (
             episode.observations["observation"]
-            if isinstance(episode.observations, Dict)
+            if isinstance(episode.observations, dict)
             else episode.observations
         )
 
@@ -352,7 +364,7 @@ def load_buffer_minari(expert_data_task: str) -> ReplayBuffer:
     rewards = np.concatenate(rewards_list, axis=0)
     # truncations = np.concatenate(truncations_list, axis=0)
 
-    replay_buffer = ReplayBuffer.from_data(
+    return ReplayBuffer.from_data(
         obs=observations,
         act=actions,
         rew=rewards,
@@ -361,10 +373,9 @@ def load_buffer_minari(expert_data_task: str) -> ReplayBuffer:
         terminated=terminals,
         truncated=np.zeros(len(terminals)),
     )
-    return replay_buffer
 
 
-def check_minari_files_exist(file_paths: Union[str, List[str]]) -> None:
+def check_minari_files_exist(file_paths: str | list[str]) -> None:
     data_set_minari_paths = get_dataset_path("")
     if isinstance(file_paths, str):
         file_paths = [file_paths]
@@ -378,31 +389,30 @@ def check_minari_files_exist(file_paths: Union[str, List[str]]) -> None:
 def discount_cumsum(x, gamma):
     disc_cumsum = np.zeros_like(x)
     disc_cumsum[-1] = x[-1]
-    for t in reversed(range(x.shape[0]-1)):
-        disc_cumsum[t] = x[t] + gamma * disc_cumsum[t+1]
+    for t in reversed(range(x.shape[0] - 1)):
+        disc_cumsum[t] = x[t] + gamma * disc_cumsum[t + 1]
     return disc_cumsum
 
 
 class D4RLTrajectoryDataset(Dataset):
     def __init__(self, dataset_path, context_len, rtg_scale):
-
         self.context_len = context_len
         self.rtg_scale = rtg_scale
 
         # load dataset
-        with open(dataset_path, 'rb') as f:
+        with open(dataset_path, "rb") as f:
             self.trajectories = pickle.load(f)
 
         # calculate min len of traj, state mean and variance
         # and returns_to_go for all traj
-        min_len = 10 ** 6
+        min_len = 10**6
         states = []
         for traj in self.trajectories:
-            traj_len = traj['observations'].shape[0]
+            traj_len = traj["observations"].shape[0]
             min_len = min(min_len, traj_len)
-            states.append(traj['observations'])
+            states.append(traj["observations"])
             # calculate returns to go and rescale them
-            traj['returns_to_go'] = discount_cumsum(traj['rewards'], 1.0) / rtg_scale
+            traj["returns_to_go"] = discount_cumsum(traj["rewards"], 1.0) / rtg_scale
 
         # used for input normalization
         states = np.concatenate(states, axis=0)
@@ -410,7 +420,7 @@ class D4RLTrajectoryDataset(Dataset):
 
         # normalize states
         for traj in self.trajectories:
-            traj['observations'] = (traj['observations'] - self.state_mean) / self.state_std
+            traj["observations"] = (traj["observations"] - self.state_mean) / self.state_std
 
     def get_state_stats(self):
         return self.state_mean, self.state_std
@@ -420,15 +430,15 @@ class D4RLTrajectoryDataset(Dataset):
 
     def __getitem__(self, idx):
         traj = self.trajectories[idx]
-        traj_len = traj['observations'].shape[0]
+        traj_len = traj["observations"].shape[0]
 
         if traj_len >= self.context_len:
             # sample random index to slice trajectory
             si = random.randint(0, traj_len - self.context_len)
 
-            states = torch.from_numpy(traj['observations'][si: si + self.context_len])
-            actions = torch.from_numpy(traj['actions'][si: si + self.context_len])
-            returns_to_go = torch.from_numpy(traj['returns_to_go'][si: si + self.context_len])
+            states = torch.from_numpy(traj["observations"][si : si + self.context_len])
+            actions = torch.from_numpy(traj["actions"][si : si + self.context_len])
+            returns_to_go = torch.from_numpy(traj["returns_to_go"][si : si + self.context_len])
             timesteps = torch.arange(start=si, end=si + self.context_len, step=1)
 
             # all ones since no padding
@@ -438,36 +448,51 @@ class D4RLTrajectoryDataset(Dataset):
             padding_len = self.context_len - traj_len
 
             # padding with zeros
-            states = torch.from_numpy(traj['observations'])
-            states = torch.cat([states,
-                                torch.zeros(([padding_len] + list(states.shape[1:])),
-                                            dtype=states.dtype)],
-                               dim=0)
+            states = torch.from_numpy(traj["observations"])
+            states = torch.cat(
+                [states, torch.zeros(([padding_len, *list(states.shape[1:])]), dtype=states.dtype)],
+                dim=0,
+            )
 
-            actions = torch.from_numpy(traj['actions'])
-            actions = torch.cat([actions,
-                                 torch.zeros(([padding_len] + list(actions.shape[1:])),
-                                             dtype=actions.dtype)],
-                                dim=0)
+            actions = torch.from_numpy(traj["actions"])
+            actions = torch.cat(
+                [
+                    actions,
+                    torch.zeros(([padding_len, *list(actions.shape[1:])]), dtype=actions.dtype),
+                ],
+                dim=0,
+            )
 
-            returns_to_go = torch.from_numpy(traj['returns_to_go'])
-            returns_to_go = torch.cat([returns_to_go,
-                                       torch.zeros(([padding_len] + list(returns_to_go.shape[1:])),
-                                                   dtype=returns_to_go.dtype)],
-                                      dim=0)
+            returns_to_go = torch.from_numpy(traj["returns_to_go"])
+            returns_to_go = torch.cat(
+                [
+                    returns_to_go,
+                    torch.zeros(
+                        ([padding_len, *list(returns_to_go.shape[1:])]),
+                        dtype=returns_to_go.dtype,
+                    ),
+                ],
+                dim=0,
+            )
 
             timesteps = torch.arange(start=0, end=self.context_len, step=1)
 
-            traj_mask = torch.cat([torch.ones(traj_len, dtype=torch.long),
-                                   torch.zeros(padding_len, dtype=torch.long)],
-                                  dim=0)
+            traj_mask = torch.cat(
+                [
+                    torch.ones(traj_len, dtype=torch.long),
+                    torch.zeros(padding_len, dtype=torch.long),
+                ],
+                dim=0,
+            )
 
         return timesteps, states, actions, returns_to_go, traj_mask
 
 
-def widget_list(list_names: List[str], description: str = ''):
-    widget_dropdown = widgets.Dropdown(options=list_names, value=list_names[0], description=description)
+def widget_list(list_names: list[Any], description: str = ""):
+    widget_dropdown = widgets.Dropdown(
+        options=list_names,
+        value=list_names[0],
+        description=description,
+    )
     display(widget_dropdown)
     return widget_dropdown
-
-

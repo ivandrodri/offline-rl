@@ -1,20 +1,17 @@
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any
 
 import gymnasium as gym
 import numpy as np
 import torch
-from tianshou.policy import ImitationPolicy
+from tianshou.policy import BasePolicy, ImitationPolicy
 from torch import nn
 
+from offline_rl.offline_policies.policy_model import PolicyModel
 from offline_rl.utils import extract_dimension
 
-policy_config = {
+DEFAULT_POLICY_CONFIG = {
     "lr": 0.001,
 }
-
-
-def il_default_config():
-    return policy_config
 
 
 class DQNVector(nn.Module):
@@ -22,7 +19,7 @@ class DQNVector(nn.Module):
         self,
         input_dim: int,
         action_shape: int,
-        device: Union[str, int, torch.device] = "cpu",
+        device: str | int | torch.device = "cpu",
     ) -> None:
         super().__init__()
 
@@ -40,28 +37,33 @@ class DQNVector(nn.Module):
 
     def forward(
         self,
-        obs: Union[np.ndarray, torch.Tensor],
-        state: Optional[Any] = None,
-        info: Dict[str, Any] = {},
-    ) -> Tuple[torch.Tensor, Any]:
+        obs: np.ndarray | torch.Tensor,
+        state: Any | None = None,
+        info: dict[str, Any] | None = None,
+    ) -> tuple[torch.Tensor, Any]:
         r"""Mapping: s -> Q(s, \*)."""
+        if info is None:
+            info = {}
         obs = torch.as_tensor(obs, device=self.device, dtype=torch.float32)
         return self.net(obs), state
 
 
-def create_il_policy_from_dict(
-    policy_config: Dict[str, Any],
-    action_space: gym.core.ActType,
-    observation_space: gym.core.ObsType,
-):
-    observation_shape = extract_dimension(observation_space)
-    action_shape = extract_dimension(action_space)
+class ILPolicyModel(PolicyModel):
+    def default_config(self) -> dict[str, Any]:
+        return DEFAULT_POLICY_CONFIG
 
-    device = "cpu"
+    def create_policy_from_dict(
+        self,
+        policy_config: dict[str, Any],
+        action_space: gym.core.ActType,
+        observation_space: gym.core.ObsType,
+    ) -> BasePolicy:
+        observation_shape = extract_dimension(observation_space)
+        action_shape = extract_dimension(action_space)
 
-    net = DQNVector(observation_shape, action_shape, device=device).to(device)
+        device = "cpu"
 
-    optim = torch.optim.Adam(net.parameters(), lr=policy_config["lr"])
-    policy = ImitationPolicy(actor=net, optim=optim, action_space=action_space)
+        net = DQNVector(observation_shape, action_shape, device=device).to(device)
 
-    return policy
+        optim = torch.optim.Adam(net.parameters(), lr=policy_config["lr"])
+        return ImitationPolicy(actor=net, optim=optim, action_space=action_space)

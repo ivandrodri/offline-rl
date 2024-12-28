@@ -1,6 +1,6 @@
 import re
 
-from offline_rl.custom_envs.utils import Grid2DInitialConfig
+from offline_rl.custom_envs.env_wrappers import Grid2DInitialConfig
 
 
 def is_v_plus_number(input_string):
@@ -13,7 +13,7 @@ def generate_compatible_minari_dataset_name(env_name: str, data_set_name: str, v
     if not is_v_plus_number(version):
         raise ValueError(
             f"Your minari file is call {full_data_set_name} but the version should be a lower 'v' "
-            f"followed by a number, e.g 'v0', in order to be compatible with Minari library."
+            f"followed by a number, e.g 'v0', in order to be compatible with Minari library.",
         )
     return full_data_set_name
 

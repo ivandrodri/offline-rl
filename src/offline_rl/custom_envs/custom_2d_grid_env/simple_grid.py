@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Tuple, Union
+from typing import ClassVar
 
 import numpy as np
 from gymnasium import Env, spaces
@@ -29,10 +29,11 @@ def one_hot_to_integer(one_hot_vector):
     return np.argmax(one_hot_vector)
 
 
+# ToDo: This code was taken from https://github.com/damat-le/gym-simplegrid.git and it is a bit dirty.
+#  Clean/Refactoring needed.
 class Custom2DGridEnv(Env):
-    """
-    Simple Grid Environment: Adapted from https://github.com/damat-le/gym-simplegrid.git for use in
-    the RL workshop, with custom modifications to meet specific workshop requirements.
+    """Simple Grid Environment: Adapted from https://github.com/damat-le/gym-simplegrid.git with custom
+    modifications.
 
     The environment is a grid with obstacles (walls). The agent can move in one of the four cardinal directions.
     If they try to move over an obstacle or out of the grid bounds, they stay in place. The environment is
@@ -60,8 +61,7 @@ class Custom2DGridEnv(Env):
     int (s) or tuple (x,y) and represent the agent starting and goal positions respectively.
     """
 
-    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 5}
-    MOVES: dict[int, tuple] = {
+    MOVES: ClassVar[dict[int, tuple]] = {
         0: (-1, 0),  # UP
         1: (1, 0),  # DOWN
         2: (0, -1),  # LEFT
@@ -75,8 +75,7 @@ class Custom2DGridEnv(Env):
         discrete_action: bool = True,
         vectorial_observation_space: bool = True,
     ):
-        """
-        :param obstacle_map:
+        """:param obstacle_map:
         :param render_mode:
         :param discrete_action: If False, this is a trick to make the environment work with continuous
             action spaces RL algorithms. In the discrete case the action will be 0,1,2 or 3 but in the
@@ -86,15 +85,21 @@ class Custom2DGridEnv(Env):
          :param vectorial_observation_space: if True a one-hot encoding format will be used as this will be
             useful for RL algorithms that deal with vectorial observations.
         """
+        self.metadata = {"render_modes": ["rgb_array", "human", None], "render_fps": 5}
+        if render_mode not in self.metadata["render_modes"]:
+            raise ValueError(
+                f"The only render modes for the {self.__class__.__name__} are"
+                f" {self.metadata['render_modes']}, but you provided {render_mode}.",
+            )
+        self.render_mode = render_mode  # Add render_mode support
 
-        # Env confinguration
         self.obstacles = self.parse_obstacle_map(obstacle_map)  # walls
         self.nrow, self.ncol = self.obstacles.shape
 
         self.discrete_action = discrete_action
         if self.discrete_action:
             self.action_space = spaces.Discrete(
-                len(self.MOVES)
+                len(self.MOVES),
             )  # Two possible actions: move left or move right
         else:
             self.action_space = spaces.Box(low=0.0, high=1.0, shape=(4,), dtype=np.float64)
@@ -102,7 +107,10 @@ class Custom2DGridEnv(Env):
         self.vectorial_observation_space = vectorial_observation_space
         if self.vectorial_observation_space:
             self.observation_space = spaces.Box(
-                low=0.0, high=1.0, shape=(self.nrow * self.ncol,), dtype=np.float64
+                low=0.0,
+                high=1.0,
+                shape=(self.nrow * self.ncol,),
+                dtype=np.float64,
             )
         else:
             self.observation_space = spaces.Discrete(self.nrow * self.ncol - 1)
@@ -121,9 +129,8 @@ class Custom2DGridEnv(Env):
         self.start_xy = self.parse_state_option("start_loc", options)
         self.goal_xy = self.parse_state_option("goal_loc", options)
 
-    def reset(self, seed: int | None = None, options: dict = None) -> tuple:
-        """
-        Reset the environment.
+    def reset(self, seed: int | None = None, options: dict | None = None) -> tuple:
+        """Reset the environment.
 
         Parameters
         ----------
@@ -132,7 +139,6 @@ class Custom2DGridEnv(Env):
         options: dict
             Optional dict that allows you to define the start (`start_loc` key) and goal (`goal_loc`key) position when resetting the env. By default options={}, i.e. no preference is expressed for the start and goal states and they are randomly sampled.
         """
-
         # Set seed
         super().reset(seed=seed)
 
@@ -151,16 +157,10 @@ class Custom2DGridEnv(Env):
 
         return self.get_obs(), self.get_info()
 
-    def step(self, action: Union[int, np.ndarray]):
-        """
-        Take a step in the environment.
-        """
-
+    def step(self, action: int | np.ndarray):
+        """Take a step in the environment."""
         if isinstance(action, np.ndarray):
-            if len(action.shape) > 0:
-                action = int(action.argmax())  # if action is a vector of directions
-            else:
-                action = int(action)  # if action is an scalar with the
+            action = int(action.argmax()) if len(action.shape) > 0 else int(action)
 
         # Get the current position of the agent
         row, col = self.agent_xy
@@ -189,8 +189,7 @@ class Custom2DGridEnv(Env):
         return self.get_obs(), self.reward, self.done, time_out, self.get_info()
 
     def parse_obstacle_map(self, obstacle_map) -> np.ndarray:
-        """
-        Initialise the grid.
+        """Initialise the grid.
 
         The grid is described by a map, i.e. a list of strings where each string denotes a row of the grid and is a sequence of 0s and 1s, where 0 denotes a free cell and 1 denotes a wall cell.
 
@@ -207,8 +206,8 @@ class Custom2DGridEnv(Env):
         """
         if isinstance(obstacle_map, list):
             map_str = np.asarray(obstacle_map, dtype="c")
-            map_int = np.asarray(map_str, dtype=int)
-            return map_int
+            return np.asarray(map_str, dtype=int)
+        return None
         # elif isinstance(obstacle_map, str):
         #    map_str = MAPS[obstacle_map]
         #    map_str = np.asarray(map_str, dtype='c')
@@ -218,22 +217,19 @@ class Custom2DGridEnv(Env):
         #    raise ValueError(f"You must provide either a map of obstacles or the name of an existing map. Available existing maps are {', '.join(MAPS.keys())}.")
 
     def parse_state_option(self, state_name: str, options: dict) -> tuple:
-        """
-        parse the value of an option of type state from the dictionary of options usually passed to the reset method. Such value denotes a position on the map and it must be an int or a tuple.
-        """
+        """Parse the value of an option of type state from the dictionary of options usually passed to the reset method. Such value denotes a position on the map and it must be an int or a tuple."""
         try:
             state = options[state_name]
             if isinstance(state, int):
                 return self.to_xy(state)
-            elif isinstance(state, tuple) or isinstance(state, list):
+            if isinstance(state, tuple | list):
                 return state
-            else:
-                raise TypeError(f"Allowed types for `{state_name}` are int or tuple.")
+            raise TypeError(f"Allowed types for `{state_name}` are int or tuple.")
         except KeyError:
             state = self.sample_valid_state_xy()
             logger = logging.getLogger()
             logger.info(
-                f"Key `{state_name}` not found in `options`. Random sampling a valid value for it:"
+                f"Key `{state_name}` not found in `options`. Random sampling a valid value for it:",
             )
             logger.info(f"...`{state_name}` has value: {state}")
             return state
@@ -257,46 +253,34 @@ class Custom2DGridEnv(Env):
             self.obstacles[tuple(self.goal_xy)] == 0
         ), f"Goal position {self.goal_xy} overlaps with a wall."
         assert self.is_in_bounds(
-            *tuple(self.start_xy)
+            *tuple(self.start_xy),
         ), f"Start position {self.start_xy} is out of bounds."
         assert self.is_in_bounds(
-            *tuple(self.goal_xy)
+            *tuple(self.goal_xy),
         ), f"Goal position {self.goal_xy} is out of bounds."
 
     def to_s(self, row: int, col: int) -> int:
-        """
-        Transform a (row, col) point to a state in the observation space.
-        """
+        """Transform a (row, col) point to a state in the observation space."""
         return row * self.ncol + col
 
     def to_xy(self, s: int) -> tuple[int, int]:
-        """
-        Transform a state in the observation space to a (row, col) point.
-        """
+        """Transform a state in the observation space to a (row, col) point."""
         return (s // self.ncol, s % self.ncol)
 
     def on_goal(self) -> bool:
-        """
-        Check if the agent is on its own goal.
-        """
+        """Check if the agent is on its own goal."""
         return tuple(self.agent_xy) == tuple(self.goal_xy)
 
     def is_free(self, row: int, col: int) -> bool:
-        """
-        Check if a cell is free.
-        """
+        """Check if a cell is free."""
         return self.obstacles[row, col] == 0
 
     def is_in_bounds(self, row: int, col: int) -> bool:
-        """
-        Check if a target cell is in the grid bounds.
-        """
+        """Check if a target cell is in the grid bounds."""
         return 0 <= row < self.nrow and 0 <= col < self.ncol
 
     def get_reward(self, x: int, y: int) -> float:
-        """
-        Get the reward of a given cell.
-        """
+        """Get the reward of a given cell."""
         # if not self.is_in_bounds(x, y):
         #    return -1.0
         # elif not self.is_free(x, y):
@@ -313,38 +297,34 @@ class Custom2DGridEnv(Env):
         # return rew
         if (x, y) == self.goal_xy:
             return 0.0
-        elif not self.is_in_bounds(x, y):
+        if not self.is_in_bounds(x, y):
             return -1.0
-        else:
-            return (
-                -0.1
-                * ((self.goal_xy[0] - x) ** 2 + (self.goal_xy[1] - y) ** 2) ** 0.5
-                / (self.ncol * self.nrow)
-            )
+
+        return (
+            -0.1
+            * ((self.goal_xy[0] - x) ** 2 + (self.goal_xy[1] - y) ** 2) ** 0.5
+            / (self.ncol * self.nrow)
+        )
 
     def get_obs(self) -> int:
         state = self.to_s(*self.agent_xy)
-        state = integer_to_one_hot(state, n=self.ncol * self.nrow - 1)
-        return state
+        return integer_to_one_hot(state, n=self.ncol * self.nrow - 1)
 
     def get_info(self) -> dict:
         return {"agent_xy": self.agent_xy}
 
     def close(self):
-        """
-        Close the environment.
-        """
+        """Close the environment."""
         if self.window:
             self.window.close()
-        return None
+        return
 
     def render(self):
-        """
-        Render the environment.
-        """
+        """Render the environment."""
         if self.render_mode is None:
             pass
-        elif self.render_mode == "human":
+            return None
+        if self.render_mode == "human":
             img = self.render_frame()
             if not self.window:
                 self.window = Window()
@@ -352,18 +332,17 @@ class Custom2DGridEnv(Env):
             caption = ""
             self.window.show_img(img, caption, self.fps)
             return None
-        elif self.render_mode == "rgb_array":
+        if self.render_mode == "rgb_array" or self.render_mode == "rgb_array_list":
             return self.render_frame()
-        elif self.render_mode == "rgb_array_list":
-            img = self.render_frame()
-            self.frames.append(img)
-            return self.frames
-        else:
-            raise ValueError(f"Unsupported rendering mode {self.render_mode}")
+        # if self.render_mode == "rgb_array_list":
+        #    img = self.render_frame()
+        #    self.frames.append(img)
+        #    return self.frames
+
+        raise ValueError(f"Unsupported rendering mode {self.render_mode}")
 
     def render_frame(self, tile_size=r.TILE_PIXELS, highlight_mask=None):
-        """
-        @NOTE: Once again, if agent position is (x,y) then, to properly
+        """@NOTE: Once again, if agent position is (x,y) then, to properly
         render it, we have to pass (y,x) to the grid.render method.
 
         tile_size: tile size in pixels
@@ -383,10 +362,7 @@ class Custom2DGridEnv(Env):
         # Render grid with obstacles
         for x in range(self.nrow):
             for y in range(self.ncol):
-                if self.obstacles[x, y] == 1:
-                    cell = r.Wall(color="black")
-                else:
-                    cell = None
+                cell = r.Wall(color="black") if self.obstacles[x, y] == 1 else None
 
                 img = self.update_cell_in_frame(img, x, y, cell, tile_size)
 
@@ -403,15 +379,10 @@ class Custom2DGridEnv(Env):
         # Render agent
         x, y = self.agent_xy
         cell = r.Agent(color=self.agent_color)
-        img = self.update_cell_in_frame(img, x, y, cell, tile_size)
-
-        return img
+        return self.update_cell_in_frame(img, x, y, cell, tile_size)
 
     def render_cell(self, obj: r.WorldObj, highlight=False, tile_size=r.TILE_PIXELS, subdivs=3):
-        """
-        Render a tile and cache the result
-        """
-
+        """Render a tile and cache the result."""
         # Hash map lookup key for the cache
         if not isinstance(obj, r.Agent):
             key = (None, highlight, tile_size)
@@ -422,7 +393,7 @@ class Custom2DGridEnv(Env):
 
         img = np.zeros(shape=(tile_size * subdivs, tile_size * subdivs, 3), dtype=np.uint8) + 255
 
-        if obj != None:
+        if obj is not None:
             obj.render(img)
 
         # Highlight the cell if needed
@@ -443,8 +414,7 @@ class Custom2DGridEnv(Env):
         return img
 
     def update_cell_in_frame(self, img, x, y, cell, tile_size):
-        """
-        Parameters
+        """Parameters
         ----------
         img : np.ndarray
             Image to update.
@@ -468,10 +438,10 @@ class Custom2DGridEnv(Env):
     def set_new_obstacle_map(self, new_obstacle_map):
         self.obstacles = self.parse_obstacle_map(new_obstacle_map)
 
-    def set_starting_point(self, start_xy: Tuple[int, int]):
+    def set_starting_point(self, start_xy: tuple[int, int]):
         options = {"start_loc": start_xy, "goal_loc": self.goal_xy}
         self.start_xy = self.parse_state_option("start_loc", options)
 
-    def set_goal_point(self, goal_xy: Tuple[int, int]):
+    def set_goal_point(self, goal_xy: tuple[int, int]):
         options = {"start_loc": self.start_xy, "goal_loc": goal_xy}
         self.goal_xy = self.parse_state_option("goal_loc", options)

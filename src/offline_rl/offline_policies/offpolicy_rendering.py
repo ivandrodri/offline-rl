@@ -1,6 +1,7 @@
 import logging
 import sys
-from typing import Callable, Union, Any, List
+from collections.abc import Callable
+from typing import Any
 
 import gymnasium as gym
 import mediapy
@@ -13,12 +14,12 @@ from tianshou.policy import BasePolicy, ImitationPolicy
 from torch import nn
 
 from offline_rl.behavior_policies.behavior_policy_registry import (
-    BehaviorPolicyRestorationConfigFactoryRegistry, BehaviorPolicyType)
+    BehaviorPolicy2dGridFactory,
+)
 from offline_rl.custom_envs.custom_2d_grid_env.simple_grid import Custom2DGridEnv
-from offline_rl.custom_envs.custom_envs_registration import \
-    RenderMode, EnvFactory
-from offline_rl.custom_envs.gym_torcs.gym_torcs import TorcsEnv, TorcsLidarEnv
-from offline_rl.custom_envs.utils import Grid2DInitialConfig
+from offline_rl.custom_envs.custom_envs_registration import EnvFactory
+from offline_rl.custom_envs.env_wrappers import Grid2DInitialConfig
+from offline_rl.custom_envs.envs_registration_utils import RenderMode
 from offline_rl.utils import extract_dimension
 from offline_rl.visualizations.utils import ignore_keyboard_interrupt
 
@@ -58,13 +59,19 @@ def render_rgb_frames_pygame(env: gym.Env, screen, time_frame=20):
 
 def initialize_pygame(title="RL agent animation"):
     import pygame
+
     pygame.init()
     screen = pygame.display.set_mode([256, 256])
     pygame.display.set_caption(title)
     return screen
 
 
-def render_mediapy(list_of_frames: List[np.ndarray], fps: float = 1, title="2d-GridWorld", **kwargs: Any):
+def render_mediapy(
+    list_of_frames: list[np.ndarray],
+    fps: float = 1,
+    title="2d-GridWorld",
+    **kwargs: Any,
+):
     if len(list_of_frames) == 0:
         return
     mediapy.show_video(list_of_frames, fps=fps, title=title, **kwargs)
@@ -72,24 +79,23 @@ def render_mediapy(list_of_frames: List[np.ndarray], fps: float = 1, title="2d-G
 
 @ignore_keyboard_interrupt
 def offpolicy_rendering(
-    env_or_env_name: Union[gym.Env, str],
-    render_mode: RenderMode | None = RenderMode.RGB_ARRAY_LIST,
+    env_or_env_name: gym.Env | str,
+    render_mode: RenderMode | None = RenderMode.RGB_ARRAY,
     env_2d_grid_initial_config: Grid2DInitialConfig = None,
-    behavior_policy_name: BehaviorPolicyType = None,
-    policy_model: Union[BasePolicy, Callable, nn.Module] = None,
+    behavior_policy: BehaviorPolicy2dGridFactory = None,
+    policy_model: BasePolicy | Callable | nn.Module = None,
     num_frames: int = 100,
     imitation_policy_sampling: bool = False,
     inline: bool = True,
     fps: float = 8.0,
 ):
-    """
-    :param env_or_env_name: A gym environment or an env name.
+    r""":param env_or_env_name: A gym environment or an env name.
     :param render_mode:
     :param env_2d_grid_initial_config: Initial config, namely obstacles and initial and target positions. Only used
         for Custom2DGridEnv configuration when env_or_env_name is the registered environment name.
-    :param behavior_policy_name: name of behavior policy (only if behavior_policy is None -
+    :param behavior_policy: name of behavior policy (only if behavior_policy is None -
         see behavior_policy_registry.py)
-    :param policy_model: A Tianshou policy mode or a callable that accept an state and the env and returns an action
+    :param policy_model: A Tianshou policy mode or a callable that accept a state and the env and returns an action
     :param num_frames: Number of frames
     :param imitation_policy_sampling: Only for imitation learning policy. If False we compute the eps greedy of \pi(a|s).
     :param inline: only to visualize the rendering inline in a jupyter notebook.
@@ -116,44 +122,32 @@ def offpolicy_rendering(
     ```
 
     """
-    if behavior_policy_name is None and policy_model is None:
+    if behavior_policy is None and policy_model is None:
         raise ValueError("Either behavior_policy_name or behavior_policy must be provided.")
-    if behavior_policy_name is not None and policy_model is not None:
+    if behavior_policy is not None and policy_model is not None:
         raise ValueError(
-            "Both behavior_policy_name and behavior_policy cannot be provided simultaneously."
+            "Both behavior_policy_name and behavior_policy cannot be provided simultaneously.",
         )
 
     if isinstance(env_or_env_name, str):
-        env = EnvFactory[env_or_env_name].get_env(render_mode=render_mode, grid_config=env_2d_grid_initial_config)
+        env = EnvFactory[env_or_env_name].get_env(
+            render_mode=render_mode,
+            grid_config=env_2d_grid_initial_config,
+        )
     else:
         env = env_or_env_name
-
-    # TORCS render mode must be configured from the TORCS api.
-    if isinstance(env.unwrapped, TorcsEnv) or isinstance(env.unwrapped, TorcsLidarEnv):
-        render_mode = None
 
     state, _ = env.reset()
 
     state_shape = extract_dimension(env.observation_space)
 
-    if not inline:
-        if render_mode == RenderMode.RGB_ARRAY_LIST:
-            screen = initialize_pygame()
+    if not inline and render_mode == RenderMode.RGB_ARRAY_LIST:
+        screen = initialize_pygame()
 
     list_of_frames = []
     for _ in range(num_frames):
-        if behavior_policy_name is not None:
-            behavior_policy = BehaviorPolicyRestorationConfigFactoryRegistry.__dict__[
-                behavior_policy_name
-            ]
-
-            if behavior_policy_name == BehaviorPolicyType.random:
-                action = env.action_space.sample()
-            elif isinstance(env.unwrapped, TorcsEnv):
-                raw_observation = env.raw_observation
-                action = np.array(behavior_policy(raw_observation, env), dtype=np.float32)
-            else:
-                action = behavior_policy(state, env)
+        if behavior_policy is not None:
+            action = behavior_policy(state, env)
         else:
             if isinstance(policy_model, BasePolicy):
                 tensor_state = Batch({"obs": state.reshape(1, state_shape), "info": {}})
@@ -173,23 +167,24 @@ def offpolicy_rendering(
                         else policy_output.act[0].detach().cpu().numpy()
                     )
             elif isinstance(policy_model, nn.Module):
-                action=policy_model(torch.Tensor(state)).detach().numpy()
+                action = policy_model(torch.Tensor(state)).detach().numpy()
             elif isinstance(policy_model, Callable):
                 action = policy_model(state, env)
 
         next_state, reward, done, time_out, info = env.step(action)
         num_frames += 1
 
-        if render_mode == RenderMode.RGB_ARRAY_LIST:
+        if render_mode == RenderMode.RGB_ARRAY:
             if inline:
                 rendered_data = env.render()
                 frames = rendered_data[0]
+
                 if isinstance(env.unwrapped, Custom2DGridEnv):
                     frames = np.transpose(rendered_data[0], (0, 1, 2))
                 list_of_frames.append(frames)
             else:
                 render_rgb_frames_pygame(env, screen)
-        elif render_mode == None:
+        elif render_mode is None:
             pass
         else:
             env.render()
@@ -205,6 +200,3 @@ def offpolicy_rendering(
 
     if inline:
         render_mediapy(list_of_frames, fps=fps)
-    if isinstance(env.unwrapped, TorcsEnv) or isinstance(env.unwrapped, TorcsLidarEnv):
-        env.end()
-

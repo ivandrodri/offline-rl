@@ -65,7 +65,7 @@ jobs:
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
             ivanrodri2020/offlinerl:latest \
-            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files *.ipynb"
+            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && cd /workspace/notebooks && jupyter nbconvert --to html  --embed-images --output-dir /workspace/nb_html *.ipynb"
             
       # Step 5: Upload HTML files as GitHub Pages artifact (optional)
       - name: Deploy to GitHub Pages
