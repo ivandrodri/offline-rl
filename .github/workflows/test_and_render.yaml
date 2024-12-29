@@ -78,19 +78,9 @@ jobs:
                 --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
                 --TemplateExporter.exclude_output=True \
                 --HTMLExporter.template=lab \
-                --HTMLExporter.embed_images=False *.ipynb "
-#              echo '<html><body><h1>My Jupyter Notebooks</h1><ul>' > index.html && \
-#              for file in *.html; do \
-#                echo '<li><a href=\"$file\">$file</a></li>' >> index.html; \
-#              done && \
-#              echo '</ul></body></html>' >> index.html
-#            "
-#                   bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && \
-#            cp -r /workspace/notebooks/_static/images /workspace/html_files/ && \
-#            cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files
-#            --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
-#            --TemplateExporter.exclude_input=True --TemplateExporter.exclude_output=True \
-#            --HTMLExporter.template=lab --embed-images *.ipynb"
+                --HTMLExporter.embed_images=False \
+                --HTMLExporter.toc=True *.ipynb "
+
       - name: Create index.html
         run: |
           echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
@@ -99,13 +89,6 @@ jobs:
             echo "<li><a href=\"$filename\">$filename</a></li>" >> ./notebooks/index.html
           done
           echo "</ul></body></html>" >> ./notebooks/index.html
-        #run: |
-        #  echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./html_files/index.html
-        #  for file in ./html_files/*.html; do
-        #    filename=$(basename $file)
-        #    echo "<li><a href=\"$filename\">$filename</a></li>" >> ./html_files/index.html
-        #  done
-        #  echo "</ul></body></html>" >> ./html_files/index.html
 
       - name: Verify Generated Files
         run: |
@@ -126,18 +109,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./notebooks
-
-      #- name: Check contents of notebooks in gh-pages branch
-      #  run: |
-      #    git fetch origin gh-pages
-      #    git checkout gh-pages
-      #    ls -R ./notebooks
-
-#      - name: Copy static assets (images) to deploy folder
-#        run: |
-#          if [ -d "/workspace/notebooks/_static/images" ]; then
-#            cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
-#          else
-#            echo "No images to copy."
-#          fi
-
