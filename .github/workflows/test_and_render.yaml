@@ -54,6 +54,19 @@ jobs:
       - name: Set permissions for workspace directory
         run: sudo chmod -R 777 ${{ github.workspace }}
 
+      - name: List notebooks on the host
+        run: |
+          echo "Checking notebooks folder on the host:"
+          ls -la ./notebooks
+
+      - name: Debug notebooks inside Docker
+        run: |
+          docker run --rm \
+            -v /home/runner/work/offline-rl/offline-rl:/workspace \
+            your-docker-image:latest \
+            bash -c "ls -la /workspace/notebooks"
+
+
       - name: Convert Notebooks to HTML
         run: |
           docker run --rm \
