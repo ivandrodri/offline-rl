@@ -93,8 +93,12 @@ jobs:
       - name: Copy static assets (images) to deploy folder
         run: |
           mkdir -p ./notebooks/_static/images
-          cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
-
+          if [ -d "/workspace/notebooks/_static/images" ]; then
+            cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
+          else
+            echo "No images to copy."
+          fi
+          
       - name: Deploy to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
