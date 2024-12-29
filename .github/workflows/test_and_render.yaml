@@ -97,11 +97,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./notebooks
 
-      - name: Copy static assets (images) to deploy folder
+      - name: Check contents of notebooks in gh-pages branch
         run: |
-          if [ -d "/workspace/notebooks/_static/images" ]; then
-            cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
-          else
-            echo "No images to copy."
-          fi
+          git fetch origin gh-pages
+          git checkout gh-pages
+          ls -R ./notebooks
+
+#      - name: Copy static assets (images) to deploy folder
+#        run: |
+#          if [ -d "/workspace/notebooks/_static/images" ]; then
+#            cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
+#          else
+#            echo "No images to copy."
+#          fi
 
