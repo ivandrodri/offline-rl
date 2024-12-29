@@ -26,26 +26,26 @@ jobs:
 
       - name: Check Disk Space (Before Cleanup)
         run: df -h
-      - name: Cleanup Docker Space
-        run: docker system prune -a --volumes -f
-      - name: Clear BuildKit Cache
-        run: rm -rf /var/lib/buildkit/*
-      - name: Free disk space
-        run: |
-          # Disable swap (if it exists)
-          sudo swapoff -a || true
-          # Remove swapfile (if it exists)
-          [ -f /swapfile ] && sudo rm -f /swapfile || true
-          # Clean apt cache
-          sudo apt clean
-          # Remove Docker images, only if they exist
-          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
-          # Clean up all unused Docker resources (images, containers, volumes)
-          docker system prune -a --volumes -f || true
-          # Show disk space after cleanup
-          df -h
-      - name: Check Disk Space (After Cleanup)
-        run: df -h
+#      - name: Cleanup Docker Space
+#        run: docker system prune -a --volumes -f
+#      - name: Clear BuildKit Cache
+#        run: rm -rf /var/lib/buildkit/*
+#      - name: Free disk space
+#        run: |
+#          # Disable swap (if it exists)
+#          sudo swapoff -a || true
+#          # Remove swapfile (if it exists)
+#          [ -f /swapfile ] && sudo rm -f /swapfile || true
+#          # Clean apt cache
+#          sudo apt clean
+#          # Remove Docker images, only if they exist
+#          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
+#          # Clean up all unused Docker resources (images, containers, volumes)
+#          docker system prune -a --volumes -f || true
+#          # Show disk space after cleanup
+#          df -h
+#      - name: Check Disk Space (After Cleanup)
+#        run: df -h
 
       # Step 3: Pull the Docker image from Docker Hub
       - name: Pull Docker image
@@ -60,7 +60,7 @@ jobs:
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
             ivanrodri2020/offlinerl:latest \
-            bash -c "cd /workspace/notebooks && jupyter nbconvert --to html  --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_output=True --HTMLExporter.template=lab --HTMLExporter.embed_images=True *.ipynb"
+            bash -c "cd /workspace/notebooks && jupyter nbconvert --to html  --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_output=True --HTMLExporter.template=lab --HTMLExporter.embed_images=False *.ipynb"
 #            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && \
 #            cp -r /workspace/notebooks/_static/images /workspace/html_files/ && \
 #            cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files
@@ -92,6 +92,7 @@ jobs:
 
 
       - name: Deploy to GitHub Pages
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
