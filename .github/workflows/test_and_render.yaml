@@ -74,6 +74,7 @@ jobs:
             ivanrodri2020/offlinerl:latest \
             bash -c "
               cd /workspace/notebooks && \
+              pip install jupyter-book && \
               jupyter-book build . --builder html "
 
 #            bash -c "
