@@ -7541,7 +7541,7 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Main-issues">Main issues<a class="anchor-link" href="#Main-issues">¶</a></h2><p>Can techniques from online RL, known for solving complex problems effectively, be applied to offline RL?</p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MGM0ODc3MzM5MzAwNzg5MTdiZWJlZjYyNGZlZjg1ZTY0YzRjZWIzYjQyMTJlYjllZjIyNjUwZWQwZWY0ZjkwMwpzaXplIDg1NjYwCg==" style="width:60%"/>
+<img alt="offline_rl" src="_static/images/nb_94_on_policy_vs_off_policy.png" style="width:60%"/>
 <div class="slide title"> On-policy vs. off-policy approaches.
 </div>
 </div>
@@ -7555,7 +7555,7 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>In off-policy online RL, we use a replay buffer to store $(state, action, reward)$ data, updating it as the learned policy improves. Why not apply an off-policy algorithm, filling the replay buffer directly with collected data.</p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6YTEyYWYzNWYxZmNmNDA3ZjkyOTBmNmZiOGI4YWMyNTIzNWQ2ZmFhNWRmNjA4ZTBmYzdhZGUwYjhhODM4OWVhYwpzaXplIDEwNDgxMQo=" style="width:70%"/>
+<img alt="offline_rl" src="_static/images/nb_94_off_policy_vs_offline.png" style="width:70%"/>
 <p><strong>This is just a qualitative parallelism, and offline RL will work even if the data in your replay buffer is far from optimal.</strong></p>
 <p><strong>However, even though both approaches seem similar, off-policy methods won't be able to work with collected data directly.</strong></p>
 </div>
@@ -7583,7 +7583,7 @@ Q^\pi(s, a) = \mathbb{E}_\pi \left[ r_0 + \gamma r_1 + \gamma^2 r_2 + \ldots \mi
 $$</p>
 <p>where $D$ is the replay buffer, which in the offline RL case will be filled with the collected dataset.</p>
 <p><strong>As seen in the (Evaluation) step, the only potential out-of-distribution (o.o.d) issue arises when computing action $a'$, as all other values ($s$, $a$, $s'$) are from the dataset $D$.</strong></p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MDNjOTQ5YjBlYzY0NzAzYTVlNzFiOTJlNmY0ZTEzNzVlY2FmOTY5MTU0YWIzODU3ZGNmZjY4OTcxYjljMDUzNwpzaXplIDQzMzEwCg==" style="height:200px;"/>
+<img alt="offline_rl" src="_static/images/nb_94_q_value.png" style="height:200px;"/>
 </div>
 </div>
 </div>
@@ -7599,7 +7599,7 @@ $$</p>
 {\hat Q}^{k+1} \leftarrow L_1 = \arg \min_Q \mathbb{E}_{(s,a,s')\sim D} \left[\left( Q_\phi(s, a) - r(s, a) - \gamma \mathbb{E}_{a' \sim\pi_\theta(a'|s')}[Q_\phi(s', a')] \right)^2 \right]  \tag{Evaluation}
 $$</p>
 <p>the policy, $\pi_\theta(.|s)$, samples o.o.d. actions like $a'_4$ in the figure, as we don't know the rewards on o.o.d. regions, $Q(s',a'_4)$, would be unpredictable.</p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OTY2NGEzMzk5OWRhOGNlOTcwZjZmZDQ3NzgxNWI2YWE4ZmFmNzk3ODY1NGJiZDMzZGRjNzNmMjc4MzU4NjNmYQpzaXplIDQ4NjA2Cg==" style="width:50%; display: block; margin-top: 0; padding-top: 0;"/>
+<img alt="offline_rl" src="_static/images/94_dqn_ood_case.png" style="width:50%; display: block; margin-top: 0; padding-top: 0;"/>
 <p>If by chance, $Q(s',a'_4)$, is higher than that of in-distribution actions like, $a'_0, a'_1, a'_2$, this overestimated misinformation will propagate into the improvement step:</p>
 <p>$$
 \pi_{k+1} \leftarrow L_2 = \arg \max_{\pi} \mathbb{E}_{s\sim D} \left[ \mathbb{E}_{a \sim\pi_\theta(a|s)} Q^{k+1}_\phi(s, a) \right] \tag{Improvement}
@@ -7617,7 +7617,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>The figure below illustrates the problem of overestimating Q-values in the off-policy Soft Actor Critic (SAC) algorithm on the half-cheetah environment.</p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6YzBiZmEwODNmY2Q0NWU1ZjNhZDFjZjhlODYzYjM1ZGZkM2I1ZTkxYzYwOGQ1MzU4YTljOGVmMjVjOWQwNjIxOApzaXplIDE3Mzc2OQo=" style="width:70%"/>
+<img alt="offline_rl" src="_static/images/94_offpolicy_Q_values_overestimation.png" style="width:70%"/>
 <p><strong>In online RL, overestimation is addressed through exploration, which is not possible in offline methods</strong></p>
 <p><strong>Note: If we replace $a'$ with the dataset value in the evaluation step, we would learn $Q^\beta(s,a)$, the Q-value of the behavior policy. However, this would lead to the learned policy in the improvement step being generally far from optimal, especially when dealing with suboptimal data as is common in real scenarios.</strong></p>
 </div>
@@ -7631,7 +7631,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>The other important aspect of the offpolicy method introduced earlier is that it implements a dynamic programming approach that is responsible for implementing the "stitching" property, which is crucial for connecting suboptimal trajectories into optimal ones</strong>.</p>
-<img alt="offline_rl" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NjI0ZTc2NTU3YjJmOTA0YmNiYmMyZWNjYWVjYmZkZDVjNjM2ZjI4MzIyZTMwYzA4OTJiYTdmZGU3ZjE0MjJlNQpzaXplIDQwMDc2Cg==" style="width:40%"/>
+<img alt="offline_rl" src="_static/images/nb_94_stitching_property.png" style="width:40%"/>
 </div>
 </div>
 </div>
@@ -7681,7 +7681,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="Overview">Overview<a class="anchor-link" href="#Overview">¶</a></h3><p><strong>The idea is to constraint the learned policy "to be close" to the behavioral one while still introducing a controlled distributional shift to enhance the policy without going out of distribution. This balancing act is a significant challenge and a focus of ongoing RL research.</strong></p>
-<img alt="KL divergence" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NGRkZDdhM2YyM2E1MDQ1MDkzMmI0OWRjZWEwOTYzZjBhOTY5ODMzZjVlMmJjY2M3MjU2ODZiZWUyMTI2YmZiMQpzaXplIDIxMzc0Cg==" width="40%"/>
+<img alt="KL divergence" src="_static/images/nb_94_distributional_shift.png" width="40%"/>
 </div>
 </div>
 </div>
@@ -7693,7 +7693,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>In other words, <strong>you want the learned and behavioral policies to differ on $D$; for example, we don't want to exclude state-action pairs that may appear infrequently (few expert data) but could lead to higher-reward trajectories</strong>, especially considering that these states may likely appear during inference (see figs. a-b).</p>
-<img alt="KL divergence" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NGE4YzkzZTRhOTdhNzU2ZGQ4ZWI0MjFmOTRjN2U1MWVlYzM5NjE1MTIyMTA4MmQ1YzdlZGUwMzc2NDIwNDAyZApzaXplIDYyMDg3Cg==" width="80%"/>
+<img alt="KL divergence" src="_static/images/nb_94_ood_examples.png" width="80%"/>
 <p>But at the same time, <strong>we also want the policies to be close enough near to o.o.d. regions for the reasons already discussed</strong> (fig-c).</p>
 <p><strong>Note</strong>: This type of control over missing and o.o.d. data is something that cannot be achieved with imitation learning.</p>
 </div>
@@ -7740,12 +7740,12 @@ D_{KL}(\pi(.|s)||\pi_{\beta}(.|s)) \leq \epsilon
 <div style="margin-top: 20px;">
 <div style="display: flex; justify-content: space-between;">
 <div style="width: 49%;">
-<img alt="KL divergence" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6N2M3ZGQxN2NlOTcwYjYyMjk0YzE1NmVjMGJiMThlMmNmNDUzZjBmMmNkNjNjYTgwMzg0NDM4Mzg3M2EwZDVkMgpzaXplIDEwNzE4Mwo=" width="100%"/>
+<img alt="KL divergence" src="_static/images/96_KL_divergence.png" width="100%"/>
 <div class="slide title"> Fig.1: KL Divergence </div>
 </div>
 <div style="width: 10%;"></div> <!-- Empty div for space in the middle -->
 <div style="width: 40%;">
-<img alt="Your Second Image" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6M2EzZWM3MjIyZGEyOWQyZjY4Nzg0YTVlODkzZTQ2ZjFlYzM5OWIwMGI0Yjc3ZTZhNzFkODRjMWY0ZTBiYjhjOQpzaXplIDE0OTM3NAo=" width="100%"/>
+<img alt="Your Second Image" src="_static/images/96_DKL_2.png" width="100%"/>
 </div>
 </div>
 </div>
@@ -7764,7 +7764,7 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="KL divergence" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NjRlMWFjZjA5ODc5NWFhYmUwOTZlYmIyN2MyOWVmZjUwMTc4YzBjNGJmNDJiMWFhZGRhNGIzZWRjZjA5NmIxMApzaXplIDczMTgyCg==" width="60%"/>
+<img alt="KL divergence" src="_static/images/96_policy_constraint_DKL.png" width="60%"/>
 <div class="slide title"> Fig.2: DKL divergence's effect on out-of-distribution data </div>
 <p><strong>To summarize</strong>: The $D_{KL}$ divergence discourages undesired o.o.d actions, as in case (b), yet encourages important o.o.d actions, as in case (a), crucial for enhancing the learned policy. This ensures that state distributions $d_{\pi}(s)$ and $d_{\pi_{\beta}}(s)$ are close around a given state $s$, so the distributional shift won't be too large. In contrast, case (b) will typically exhibits a large distributional shift.</p>
 </div>
@@ -7778,7 +7778,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Moreover, actions such as $a_4$, in fig.2a, may guide our agent to highly rewarding regions, as illustrated in the figure below.</p>
-<img alt="KL divergence" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6Y2Q4YzBlNmY1MGZmYmE2YTc5M2JhNmJjZmNhOGQ2ZDgzODkxM2JjNThkMzNjZDhhNDgyZThlY2UyODYyMWYxZgpzaXplIDQwMjM0Cg==" width="50%"/>
+<img alt="KL divergence" src="_static/images/96_critical_action_states.png" width="50%"/>
 <div class="slide title"> Fig.3: Critical actions may appear infrequently in the collected data but are crucial for finding the optimal policy. </div>
 </div>
 </div>
@@ -7833,7 +7833,7 @@ $$</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>But what happens if we need to deviate considerably from the behavior policy, as can happens in realistic situations where the data collected is far from optimal?</strong>.</p>
 <p>Let's  analize the simple example in the fig. below:</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NzAxYjFhMjlmMTY1OGU2Y2JkYmIyNDA3MTYwYTE5NzYwZGM3YTdhNjZhYTk1NWUxOTkwMzNiMTM1OTAzMTExZgpzaXplIDUzODI5Cg==" width="70%"/>
+<img alt="offline_rl_4" src="_static/images/96_support_policy_constraint.png" width="70%"/>
 <p>where all data is in-distribution. Still the $D_{KL}$ constraint distribution will copy the bad behavior of $\pi_b$ .</p>
 </div>
 </div>
@@ -7846,7 +7846,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>What about constraining the policy support? In other words, <strong>we don't focus on the probability of action $a$ within the dataset, but only on whether that action is included in the dataset</strong>.</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OWY5M2JjZDRiZGRjNzk3NzQxMjRiZWU1M2JlYjhkYjAxYWZlMzE3YTI5OWU1YmY5YzNiYTcyNDNmZjlmYTJlMwpzaXplIDMzNzY1Cg==" width="40%"/>
+<img alt="offline_rl_4" src="_static/images/policy_constraint_vs_support.png" width="40%"/>
 <div class="slide title"> Fig.4: distributional vs. support policy constraint </div>
 <p><strong>This is usually a good idea: Just constrain only allowed actions and let the algorithm find the action probabilities through the evaluation-improvement equations.</strong></p>
 </div>
@@ -7918,7 +7918,7 @@ $</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Let's try to understand eq.3:</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MDFlYzBlYWNkMjU5ZDY0MmE5ZGExOWE4NTc3MGU0ZGVlMWU4ZTU1OWJjNGFjYzE3MDJjZDhhMjMyYzNiMmUwMQpzaXplIDk0NTAxCg==" width="80%"/>
+<img alt="offline_rl_4" src="_static/images/96_difference_reward.png" width="80%"/>
 <div class="slide title"> Figure 5: Optimal policy from difference reward maximization.</div>
 <p><strong>In summary, eq.3 implies finding a policy $\pi(a|s)$ that generates state-action pairs $(s_0,a_0)$ (constrained through the $D_{KL}$ to be close to the dataset) that lead to trajectories in our dataset with maximum reward. In other words, we are trying to find the optimal policy within the data.</strong></p>
 </div>
@@ -8018,7 +8018,7 @@ policy in this state, as could affect our neural network approximator.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OTk0ZjlmOGNhZTMyYWQ5YjMxNmQ5ZGZiNDI1YTQzNDgwODU5YTY5OWI0YTkwYTllYzZhZDVhZTcxZGQxYTc5ZgpzaXplIDc0MTkwCg==" width="100%"/>
+<img alt="offline_rl_4" src="_static/images/96_CQL_1.png" width="100%"/>
 <div class="slide title"> Fig.6: Policy regularization approach </div>
 <p><strong>Main idea: introduce a new policy $\mu(a|s)$ that attempts to find the actions $a$ maximizing the DNN $Q_\phi$, while simultaneously minimizing $Q_\phi$ within the $\phi$ parameter space. This effect is particularly crucial for o.o.d. actions, which are generally overestimated, as previously observed.</strong></p>
 <p><strong>The policy $\mu$ doesn't necessarily have to be proportional to $\pi(a|s)$, but it should aim to maximize Q(s,a).</strong></p>
@@ -8033,7 +8033,7 @@ policy in this state, as could affect our neural network approximator.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>These are some popular offline RL algorithms, but the list is longer:</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MzBlNzgzNzY3ZTEwMTlmMzBkYzQzZjY2MGMyMmI4NGFlYzI2ZTRiNzM4YmE2NTExNWEyMGFiMDIyYmM5N2QxZgpzaXplIDc5ODMxCg==" width="100%"/>
+<img alt="offline_rl_4" src="_static/images/nb_94_popular_offline_rl_algorithms.png" width="100%"/>
 <p>It's worth noting that most of these algorithms fall into the categories we've already discussed, namely policy constraint and policy optimization methods</p>
 </div>
 </div>
@@ -8087,7 +8087,7 @@ $$</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Batch-Constrained-deep-Q-learning-(BCQ)-algorithm">Batch Constrained deep Q-learning (BCQ) algorithm<a class="anchor-link" href="#Batch-Constrained-deep-Q-learning-(BCQ)-algorithm">¶</a></h2><p>The main idea is pictured in the figure below.</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6YWQ0MDFhYzY3ZjExNWZjN2E5ZGY5OTRhZjFmM2MyYWVmNTYwYTgyZGE1N2Q4YWRkMzE5ZGQ3NTFhNWJjZjNkMQpzaXplIDQ4NzQzCg==" width="200%"/>
+<img alt="offline_rl_4" src="_static/images/97_BCQ_algo_1.png" width="200%"/>
 <div class="slide title"> Fig.5: BCQ approach to offline RL </div>
 <p>In BCQ, the policies $\pi$ and $\pi_\beta$ are not constrained by the $D_{KL}$ divergence, but we still ensure that $\pi(s)$ generates similar actions to $\pi_\beta(s)$ through a generative model, in this case, a Variational Autoencoder (VAE), $G_\omega$:</p>
 <p>$$
@@ -8157,7 +8157,7 @@ $$</p>
 <p>This is indeed a valid approach. It's important to note that running the evaluation-improvement loop makes sense only once. During evaluation, we compute the $Q$-values of the behavior policy and derive the optimal policy based on those $Q$-values in the improvement step. Further iterations would be futile since we are limited to the fixed dataset.</p>
 <p>However, this idea often falls short in finding an optimal policy for many real-world problems. Intuitively, if our data is suboptimal, the Q-values derived from that data will also be suboptimal.</p>
 <p>The core principle of IQL is to utilize a pessimistic Q-value lower bound during evaluation, similar to policy regularization, while also ensuring consistency with in-distribution data. This strategy enables a multi-step process, facilitating multiple evaluation-improvement iterations. With each iteration, a new estimate for Q(s,a) is derived, encouraging a deeper exploration of the Q-functions and enabling the capture of broader correlations.</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6ZGM5MjMxMDJlNTcxZmI1ZTY5YmJkYmQwOWRmODEwNzZlZWQyOTZlMzQ2MDM1ZjdjNWFiOTQ1NTQ3ZTk3NjEyNApzaXplIDQ1ODA0Cg==" width="80%"/>
+<img alt="offline_rl_4" src="_static/images/96_one_step_vs_multiple_steps.png" width="80%"/>
 <div class="slide title"> Fig.6: one vs multiple step approaches.  </div>
 <p>These are the main steps involved in the IQL approach:</p>
 <p>$$L_V(\psi) = E_{(s,a)\sim D}[L_2^{\tau}(Q_{\hat{\theta}}(s, a) - V_{\psi}(s))]$$</p>
@@ -8166,7 +8166,7 @@ $$</p>
 <p>$$L_\pi(\phi) = E_{(s,a)\sim D} \left[\exp(\beta(Q_{\hat{\theta}}(s, a) - V_{\psi}(s))) \log \pi_{\phi}(a|s)\right]
 $$</p>
 <p>similar to eq.4 . The lower bound used here is the 'expectile' shown in the figure below.</p>
-<img alt="offline_rl_4" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OWI3N2Y4MmE1NjNlYTRkYjhkMGUyNzdhN2U3MDA3MjM3NDI1YzRmZTEyOTA0YWQzMDRjYzRiZTg4MTczNDk3ZQpzaXplIDEzNTY3Mgo=" width="80%"/>
+<img alt="offline_rl_4" src="_static/images/96_expectile.png" width="80%"/>
 <div class="slide title"> Fig.7: Expectile of a two dimenstional random variable.  </div>
 </div>
 </div>
