@@ -74,21 +74,25 @@ jobs:
             ivanrodri2020/offlinerl:latest \
             bash -c "
               cd /workspace/notebooks && \
-              jupyter nbconvert --to html \
-                --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
-                --TemplateExporter.exclude_output=True \
-                --HTMLExporter.template=lab \
-                --HTMLExporter.embed_images=False \
-                --HTMLExporter.toc=True *.ipynb "
+              jupyter-book build . --builder html "
 
-      - name: Create index.html
-        run: |
-          echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
-          for file in ./notebooks/*.html; do
-            filename=$(basename $file)
-            echo "<li><a href=\"$filename\">$filename</a></li>" >> ./notebooks/index.html
-          done
-          echo "</ul></body></html>" >> ./notebooks/index.html
+#            bash -c "
+#              cd /workspace/notebooks && \
+#              jupyter nbconvert --to html \
+#                --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
+#                --TemplateExporter.exclude_output=True \
+#                --HTMLExporter.template=lab \
+#                --HTMLExporter.embed_images=False \
+#                --HTMLExporter.toc=True *.ipynb "
+
+      #- name: Create index.html
+      #  run: |
+      #    echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
+      #    for file in ./notebooks/*.html; do
+      #      filename=$(basename $file)
+      #      echo "<li><a href=\"$filename\">$filename</a></li>" >> ./notebooks/index.html
+      #    done
+      #    echo "</ul></body></html>" >> ./notebooks/index.html
 
       - name: Verify Generated Files
         run: |
@@ -108,4 +112,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./notebooks
+          publish_dir: ./notebooks/_build/html

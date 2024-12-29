@@ -1,12 +1,13 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Reinforcement Learning and Control
-author: appliedAI TransferLab
-logo: _static/images/transferlab-logo.svg
+title: Offline Reinforcement Learning
+author: Ivan Rodriguez
+#logo:
 
 execute:
-  timeout: 600
+  execute_notebooks: 'off'
+  #timeout: 600
 
 sphinx:
   config:
