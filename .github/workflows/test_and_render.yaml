@@ -103,6 +103,10 @@ jobs:
           ivanrodri2020/offlinerl:latest \
           bash -c "ls -R /workspace/notebooks"
 
+      - name: List contents of ./notebooks
+        run: |
+          echo "Listing contents of ./notebooks:"
+          ls -la ./notebooks
 
       - name: Deploy to GitHub Pages
         if: always()
