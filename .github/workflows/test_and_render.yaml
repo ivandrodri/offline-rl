@@ -90,18 +90,16 @@ jobs:
         #  done
         #  echo "</ul></body></html>" >> ./html_files/index.html
 
-      - name: Copy static assets (images) to deploy folder
-        run: |
-          # Ensure the _static/images folder exists
-          mkdir -p ./notebooks/_static/images
-      
-          # Copy images from repository to the gh-pages deploy folder
-          if [ -d "./notebooks/_static/images" ]; then
-            cp -r ./notebooks/_static/images/* ./notebooks/_static/images/
-          else
-            echo "No images to copy."
-          fi
-    
+
+#      - name: Copy static assets (images) to deploy folder
+#        run: |
+#          mkdir -p ./notebooks/_static/images
+#          if [ -d "/workspace/notebooks/_static/images" ]; then
+#            cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
+#          else
+#            echo "No images to copy."
+#          fi"
+
       - name: Deploy to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
