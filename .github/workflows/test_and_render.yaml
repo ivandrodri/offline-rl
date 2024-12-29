@@ -67,6 +67,10 @@ jobs:
 #            --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
 #            --TemplateExporter.exclude_input=True --TemplateExporter.exclude_output=True \
 #            --HTMLExporter.template=lab --embed-images *.ipynb"
+      - name: Copy Static Assets
+        run: |
+          mkdir -p notebooks/_static
+          cp -r /workspace/notebooks/_static notebooks/_static
       - name: Verify Generated Files
         run: |
           echo "Listing contents of workspace/notebooks"
@@ -92,4 +96,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./workspace/notebooks
+          publish_dir: ./notebooks
