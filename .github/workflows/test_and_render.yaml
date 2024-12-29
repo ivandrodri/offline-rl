@@ -67,6 +67,10 @@ jobs:
 #            --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
 #            --TemplateExporter.exclude_input=True --TemplateExporter.exclude_output=True \
 #            --HTMLExporter.template=lab --embed-images *.ipynb"
+      - name: Verify Generated Files
+        run: |
+          echo "Listing contents of workspace/notebooks"
+          ls -R /home/runner/work/offline-rl/offline-rl/notebooks
       - name: Create index.html
         run: |
           echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
