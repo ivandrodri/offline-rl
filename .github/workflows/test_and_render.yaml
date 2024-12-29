@@ -69,20 +69,8 @@ jobs:
 #            --HTMLExporter.template=lab --embed-images *.ipynb"
       - name: Verify Generated Files
         run: |
-          docker run --rm \
-          -v /home/runner/work/offline-rl/offline-rl:/workspace \
-          ivanrodri2020/offlinerl:latest \
-          bash -c "ls -R /workspace/notebooks"
           echo "Listing contents of workspace/notebooks"
-          ls -R /home/runner/work/offline-rl/offline-rl/notebooks
-      - name: Copy Static Assets
-        run: |
-          mkdir -p notebooks/_static
-          cp -r /workspace/notebooks/_static notebooks/_static
-      - name: Verify Generated Files
-        run: |
-          echo "Listing contents of workspace/notebooks"
-          ls -R /home/runner/work/offline-rl/offline-rl/notebooks
+          ls -R workspace/notebooks
       - name: Create index.html
         run: |
           echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
