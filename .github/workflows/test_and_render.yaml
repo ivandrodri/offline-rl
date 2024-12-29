@@ -103,5 +103,5 @@ jobs:
             cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
           else
             echo "No images to copy."
-          fi"
+          fi
 
