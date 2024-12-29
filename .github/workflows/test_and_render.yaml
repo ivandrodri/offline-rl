@@ -60,7 +60,7 @@ jobs:
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
             ivanrodri2020/offlinerl:latest \
-            bash -c "cd /workspace/notebooks && jupyter nbconvert --to html  --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_output=True --HTMLExporter.template=lab --embed-images *.ipynb"
+            bash -c "cd /workspace/notebooks && jupyter nbconvert --to html  --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' --TemplateExporter.exclude_output=True --HTMLExporter.template=lab *.ipynb"
 #            bash -c "mkdir -p /workspace/html_files && chmod -R 777 /workspace/html_files && \
 #            cp -r /workspace/notebooks/_static/images /workspace/html_files/ && \
 #            cd /workspace/notebooks && jupyter nbconvert --to html --output-dir /workspace/html_files
