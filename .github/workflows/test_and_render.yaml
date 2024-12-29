@@ -90,6 +90,10 @@ jobs:
         #  done
         #  echo "</ul></body></html>" >> ./html_files/index.html
 
+      - name: Copy static assets (images) to deploy folder
+        run: |
+          mkdir -p ./notebooks/_static/images
+          cp -r /workspace/notebooks/_static/images/* ./notebooks/_static/images/
 
       - name: Deploy to GitHub Pages
         if: always()
