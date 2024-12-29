@@ -7541,7 +7541,7 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Reinforcement learning algorithms mostly use online learning, which can be a challenge for their widespread adoption. RL involves continually learning from the environment by interacting with it based on the current policy and then using this learning to improve the policy.</p>
-<img alt="Snow" src="_static/images/nb_90_online_RL_cycle.png" style="width:30%"/>
+<img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OTBkYjBiZDYyMjQ3ODFkMDdkMTYzZmUzZWU2MWM2NGY0NDlkMGViZTk5MzY2NjEwMTdlNzlhYTczNWM0MjYyYgpzaXplIDMwOTUxCg==" style="width:30%"/>
 <div class="slide title"> Fig.1 Online RL cycle </div>
 <p><strong>Why RL with data could be a very good approach</strong>:</p>
 <ul>
@@ -7592,7 +7592,7 @@ J (\pi) = \mathbb{E}_{ \color{red}{\tau \in D} \sim \pi(a|s)^{\text{offline}}}  
 {1 \over n} \sum_{i=0}^n R(\tau_i)
 $$
 with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
-<img alt="Snow" src="_static/images/90_offline_vs_online.png" style="width:50%"/>
+<img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MWY5ZWY3ODY5ZjIyM2ZkODRiMzg5YTlkZmUwZjk4OTg4ZDk4MDVhMzdlMTllNjIxYWJlMmFiNGM3YWU3NDJjYgpzaXplIDgyODIzCg==" style="width:50%"/>
 <div class="slide title"> Fig.2 Online vs. Offline RL </div>
 <p><strong>The goal of offline RL is to derive an optimal or near-optimal policy directly from $D$ without requiring further interactions with the environment</strong>.</p>
 </div>
@@ -7606,7 +7606,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>As shown in the previous slide, in offline RL, we try to find the best trajectories within the dataset, in contrast to online RL, where the goal is to find the best possible one in the entire space.</strong></p>
-<img alt="Snow" src="_static/images/nb_90_offline_vs_online_optimization.png" style="width:100%"/>
+<img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OGExYzI0MzNiMTA5OGIxOGE2YmFlYmRjNDg0ZmRiOWYwZTI1MWI1OGEyYWFlNTc5MzlkOGM4YzBmYThiZGFmYgpzaXplIDY1Njc0Cg==" style="width:100%"/>
 </div>
 </div>
 </div>
@@ -7617,7 +7617,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="Snow" src="_static/images/90_online_vs_offline.png" style="width:80%;"/>
+<img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6MDc5NGM5YWJjMjkyNWEwZGE4N2EyMDMxYWZlZDkyNzRhYjBjMmU1NmU5ZTAzMDQwYjY0NjBmZGM3YzgxZjIzMQpzaXplIDE2MzE3MQo=" style="width:80%;"/>
 <div class="slide title"> Fig.3 Online vs. Offline RL </div>
 <p><strong>Note that $D$ doesn't necessarily need to be related to the specific task at hand, but it should be sufficiently representative (i.e., containing high-reward regions of the problem). If $D$ is derived from data collected from unrelated tasks, we will need to design our own reward function, just as we did in the online RL setting.</strong></p>
 <p><strong>Notation: The behavior policy, $\pi_b$ or $\pi_\beta$ is usually a suboptimal policy, a random policy or provided by a human expert, or a mixture of them.</strong></p>
@@ -7705,7 +7705,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Online-vs-offline-learning-comparison.">Online vs offline learning comparison.<a class="anchor-link" href="#Online-vs-offline-learning-comparison.">¶</a></h2><p>We will now compare online RL with the previously introduced offline methods: Offline RL and IL.</p>
 <p>One of the key distinction between online RL and offline RL/IL lies in their exploration capabilities. In online RL, we actively explore the state-action space, while offline RL/IL operates solely within a fixed dataset (denoted as $D$). Going "out of distribution" beyond this dataset in offline RL/IL can lead to severe issues.</p>
-<img alt="offline_rl" src="_static/images/offline_RL.jpg" style="width:60%;"/>
+<img alt="offline_rl" src="data:image/jpeg;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6NTUwYWE1YWY3ZmRkOGIzMWRiNGM1YzEyM2ViNDkyYzBlYjA1NjQ5N2Q0ODkyY2Q1NWM5NzczOTJkYTY5NDg2MwpzaXplIDMzODg3Cg==" style="width:60%;"/>
 </div>
 </div>
 </div>
@@ -7717,7 +7717,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Online RL involves interactive exploration to discover the highest-reward regions</strong> by gathering environmental feedback. In contrast, <strong>offline RL imposes strict limitations on exploration beyond the dataset. This constraint results in algorithms overestimating unknown areas and attempting to navigate beyond the dataset</strong>, as illustrated in the figure below where the dataset doesn't fully represent high-reward regions.</p>
-<img alt="offline_rl_1" src="_static/images/offline_RL_3.jpg" style="width:50%;"/>
+<img alt="offline_rl_1" src="data:image/jpeg;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6ZmNiODBhNGI0YmFkMDM2NGExODIxMjYyZTc0ZWUzN2JjZjMxOTM5N2QyZGUyNTUwNDIzMGE1NjBiZGY3ODcxNApzaXplIDQwNTMyCg==" style="width:50%;"/>
 <p>As shown in the figure above on the right, once you are out of distribution (o.o.d) (states $s$ and $s'$ in red), as you don't have any feedback it will be hard to come back to $D$, as the o.o.d errors will propagate. As we will see this is one of the main challenges of offline RL and there are different techniques to mitigate this wrong behavior.</p>
 </div>
 </div>
@@ -7732,7 +7732,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 <p><strong>If you don't follow the explanation below, don't worry; just accept that once out of distribution (o.o.d.) occurs, it will be hard to return to in-distribution</strong></p>
 <p>Let's try to get some intuition:</p>
 <p>Consider a cost function given by: $ c(s,a) = 0  \text{ if } a = \pi^\beta(s)$, otherwise $c(s,a)=1$, where $\pi^\beta(s)$ represents the behavior policy.  Additionally, assume that $ \pi_\theta (a \ne \pi^\beta(s) | s) \le \epsilon \text{ for all } s \in D_{\text{train}} $ . The total error can then be estimated as:</p>
-<img alt="Snow" src="_static/images/93_imitation_learning.png" style="width:80%;"/>
+<img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6YWQwZmI5YWY4ZDFhNTUwNTU5ZjMxZDA1ZDViM2IyMjg2MDZiZDMwOGJlOWZiZDcyNzM2ZWMzZDRkNWQ3YmM5ZgpzaXplIDc3NjU3Cg==" style="width:80%;"/>
 <div class="slide title"> Fig.1 Assume that if the agent goes out-of-distribution, it is unlikely to recover. </div>
 <p>$$ \mathbb{E} \left[ \sum_t c(s_t, a_t) \right] \le \epsilon H + (1 - \epsilon) (\epsilon (H-1) +  ... ) \sim O(\epsilon H^2)$$</p>
 <p>with $H$ being the time horizon.</p>
@@ -7748,7 +7748,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<img alt="offline_rl_1" src="_static/images/nb_90_missing_point.png" style="width:100%;"/>
+<img alt="offline_rl_1" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6OTQyOTdjODA2MTMwYjU1MmZjZDExMTI0ZDI5ZDRhYzJiZGJlNDM5ZjI5OTkwN2U1NTM5ODBiOWZjZjE3OWMxNgpzaXplIDQzNzgwCg==" style="width:100%;"/>
 <p><strong>When working with datasets, sometimes important data is missing, especially if it's hard for the behavioral policy to collect (left figure). A good offline RL algorithm should be able to generate this missing data, which is impossible for imitation learning.</strong></p>
 <p><strong>On the other hand, if the data is missing because it's outside the behavior policy's capabilities (i.e., it's truly o.o.d. data), then the algorithm should detect this and avoid generating it. There could be valid reasons why these states were excluded during data collection.</strong></p>
 </div>
@@ -7764,7 +7764,7 @@ with the dataset, $D = \{ \tau_i, i=1,..,n \}$.</p>
 <p><strong>This is not a major issue in general but it is important to mention</strong>:</p>
 <p><strong>The o.o.d. issues are not the only distributional shift effect in offline RL</strong>.
 After computing the optimal policy, it typically operates within a subset of the original dataset distribution, creating a distinct form of distributional shift (D' subset in green in the figure below). Evaluating a policy substantially different from the behavior policy reduces the effective sample size (from D to D'), resulting in increased variance in the estimates. In simpler terms, the limited number of data points may not accurately represent the true data distribution.</p>
-<img alt="offline_rl_2" src="_static/images/offline_RL_2.jpg" style="width:60%;"/>
+<img alt="offline_rl_2" src="data:image/jpeg;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6YTZmMTIwMTE5YmExYmNmOGY2MGZlZDVhYjVjYTEwZDI4OWQ4ZDBlZjNkZGY2N2E5YWE5YmY0OThlMWE2MDM5MApzaXplIDQxNTUyCg==" style="width:60%;"/>
 </div>
 </div>
 </div>
@@ -7805,7 +7805,7 @@ After computing the optimal policy, it typically operates within a subset of the
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Offline-RL/IL-pipeline">Offline RL/IL pipeline<a class="anchor-link" href="#Offline-RL/IL-pipeline">¶</a></h2><img alt="Snow" src="_static/images/93_offline_RL_pipeline.png" style="width:80%;"/>
+<h2 id="Offline-RL/IL-pipeline">Offline RL/IL pipeline<a class="anchor-link" href="#Offline-RL/IL-pipeline">¶</a></h2><img alt="Snow" src="data:image/png;base64,dmVyc2lvbiBodHRwczovL2dpdC1sZnMuZ2l0aHViLmNvbS9zcGVjL3YxCm9pZCBzaGEyNTY6Y2UzYmI0NjQzYzFkZGIxOGRhMTE0NGE1YjU3YzU1OTIyZWMzMjIxZmI5YWVjNWIxZDRmNjIzMDM4MmNjYWQ4OApzaXplIDUwMTAxCg==" style="width:80%;"/>
 <p><strong>Step 1 - Data</strong>: Typically, you'll have a simulator/environment along with a behavior policy, $\pi_b(a|s)$, in order to
 collect data or instead access to historical data.</p>
 <p><strong>Step 2 - Dataset Manipulation</strong>: We'll adopt a standard format widely used in the offline RL community, facilitated by
