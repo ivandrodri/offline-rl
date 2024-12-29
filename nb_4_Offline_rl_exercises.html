@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Offline RL algorithms exercises &#8212; Offline Reinforcement Learning</title>
+    <title>Exercise: Offline RL algorithms &#8212; Offline Reinforcement Learning</title>
   
   
   
@@ -63,7 +63,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'nb_4_Offline_rl_exercises';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Offline RL theory" href="nb_3_offline_RL_theory.html" />
+    <link rel="prev" title="Exercise: Minari data collection" href="nb_2_data_dollection.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -165,10 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nb_0_IntroOfflineRL.html">Introduction to Offline Reinforcement Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nb_1_offline_RL_dataset_libraries.html">Open Source Datasets libraries for offline RL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nb_2_data_dollection.html">Exercise: Minari data collection</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nb_3_offline_RL_theory.html">Offline RL theory</a></li>
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Offline RL algorithms exercises</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Exercise: Offline RL algorithms</a></li>
 </ul>
 
     </div>
@@ -304,7 +301,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Offline RL algorithms exercises</h1>
+    <h1>Exercise: Offline RL algorithms</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -329,10 +326,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">STEP 1: Create the environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">STEP 2: Create Minari datasets</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">STEP 3: Feed data into replay buffer</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-select-offline-policies-and-training">STEP 4: Select offline policies and training</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-and-visualize-trained-policy"><strong>Restore and visualize trained policy</strong></a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-select-offline-policies-and-training">STEP 4: Select offline policies and training</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
@@ -355,20 +349,6 @@
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 <span class="o">%</span><span class="n">load_ext</span> <span class="n">offline_rl</span>
 <span class="o">%</span><span class="n">set_random_seed</span> <span class="mi">12</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">presentation_style</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_latex_macros</span>
 </pre></div>
 </div>
 </div>
@@ -418,8 +398,8 @@
 </div>
 </div>
 <p>Offline RL pipeline:</p>
-<img src="_static/images/93_offline_RL_pipeline.png" alt="Snow" style="width:50%;"><section class="tex2jax_ignore mathjax_ignore" id="offline-rl-algorithms-exercises">
-<h1>Offline RL algorithms exercises<a class="headerlink" href="#offline-rl-algorithms-exercises" title="Link to this heading">#</a></h1>
+<img src="_static/images/93_offline_RL_pipeline.png" alt="Snow" style="width:50%;"><section class="tex2jax_ignore mathjax_ignore" id="exercise-offline-rl-algorithms">
+<h1>Exercise: Offline RL algorithms<a class="headerlink" href="#exercise-offline-rl-algorithms" title="Link to this heading">#</a></h1>
 <p><strong>Off-policy methods cannot learn from data efficiently unless a significant amount of data covering a large portion of the environment states is available</strong>. Only in such cases can the agent explore the environment and get feedback similar to what’s done in an online approach. However, this scenario is rare and challenging to achieve in realistic applications, which is one of the reasons why we turn to offline RL, where only a small amount of data is available.</p>
 <p>One of the major issues when applying off-policy methods to collected data is the agent’s tendency to go out-of-distribution (o.o.d.). More importantly, once it goes o.o.d., the policy becomes unpredictable, making it impossible to return to the in-distribution region. This unpredictability propagates errors in the policy evaluation process (i.e., the dynamic programming equations), destroying the algorithm’s learning capabilities.</p>
 <section id="exercise-i">
@@ -835,8 +815,7 @@
 </div>
 </div>
 </div>
-<section id="restore-and-visualize-trained-policy">
-<h4><strong>Restore and visualize trained policy</strong><a class="headerlink" href="#restore-and-visualize-trained-policy" title="Link to this heading">#</a></h4>
+<p><strong>Restore and visualize trained policy</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SAVED_POLICY_NAME = &quot;policy_best_reward.pth&quot;</span>
@@ -873,7 +852,6 @@
 </div>
 </div>
 <p><strong>Question</strong>: Let’s now change the dataset distribution. We’ll collect 600 points with the first behavior policy and 100 with the second one. In this case, the probability of taking the suboptimal path will be higher. What paths are chosen by the algorithms?</p>
-</section>
 </section>
 </section>
 <section id="final-remarks">
@@ -920,12 +898,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="nb_3_offline_RL_theory.html"
+       href="nb_2_data_dollection.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Offline RL theory</p>
+        <p class="prev-next-title">Exercise: Minari data collection</p>
       </div>
     </a>
 </div>
@@ -960,10 +938,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">STEP 1: Create the environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">STEP 2: Create Minari datasets</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">STEP 3: Feed data into replay buffer</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-select-offline-policies-and-training">STEP 4: Select offline policies and training</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-and-visualize-trained-policy"><strong>Restore and visualize trained policy</strong></a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-select-offline-policies-and-training">STEP 4: Select offline policies and training</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
