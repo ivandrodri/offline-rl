@@ -16,7 +16,6 @@ permissions:
 jobs:
   generate_html:
     runs-on: ubuntu-latest
-    needs: docker_build
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repo

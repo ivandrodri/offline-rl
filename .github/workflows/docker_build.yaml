@@ -31,15 +31,14 @@ jobs:
           # Clean apt cache
           sudo apt clean
           # Remove Docker images, only if they exist
-#          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
-          docker system prune --volumes -f
+          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
           # Clean up all unused Docker resources (images, containers, volumes)
-          docker builder prune --filter until=24h --force
-#          docker system prune -a --volumes -f || true
+          docker system prune -a --volumes -f || true
           # Show disk space after cleanup
           df -h
       - name: Check Disk Space (After Cleanup)
         run: df -h
+
 
       - name: Checkout repo
         uses: actions/checkout@v2.3.1
