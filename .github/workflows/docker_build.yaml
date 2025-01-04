@@ -31,9 +31,11 @@ jobs:
           # Clean apt cache
           sudo apt clean
           # Remove Docker images, only if they exist
-          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
+#          docker images -q | xargs -r docker rmi || true  # 'xargs -r' will skip if no images are found
+          docker system prune --volumes -f
           # Clean up all unused Docker resources (images, containers, volumes)
-          docker system prune -a --volumes -f || true
+          docker builder prune --filter until=24h --force
+#          docker system prune -a --volumes -f || true
           # Show disk space after cleanup
           df -h
       - name: Check Disk Space (After Cleanup)
