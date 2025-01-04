@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="dagger_exercise_env" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="offline-rl-example (2)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="offline-rl-example" project-jdk-type="Python SDK" />
 </project>

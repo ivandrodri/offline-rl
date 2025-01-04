@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: [ "Build docker image with the presentation" ]
+    types:
+      - completed
 
 permissions:
   contents: write  # Allow write access to repository contents
@@ -75,7 +79,8 @@ jobs:
             bash -c "
               cd /workspace/notebooks && \
               pip install nbconvert && \
-              jupyter nbconvert --to notebook --execute --inplace *.ipynb"
+              python converter.py"
+#              jupyter nbconvert --to notebook --execute --inplace *.ipynb"
 
 
       - name: Convert Notebooks to HTML
