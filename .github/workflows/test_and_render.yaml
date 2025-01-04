@@ -67,6 +67,17 @@ jobs:
             bash -c "ls -la /workspace/notebooks"
 
 
+      - name: Execute notebooks to capture output
+        run: |
+          docker run --rm \
+            -v /home/runner/work/offline-rl/offline-rl:/workspace \
+            ivanrodri2020/offlinerl:latest \
+            bash -c "
+              cd /workspace/notebooks && \
+              pip install nbconvert && \
+              jupyter nbconvert --to notebook --execute --inplace *.ipynb"
+
+
       - name: Convert Notebooks to HTML
         run: |
           docker run --rm \

@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
@@ -22,13 +23,15 @@ from offline_rl.generate_custom_minari_datasets.utils import (
     generate_compatible_minari_dataset_name,
     get_dataset_name_2d_grid,
 )
-from offline_rl.load_env_variables import load_env_variables
+from offline_rl.set_env_variables import set_env_variables
 from offline_rl.utils import delete_minari_data_if_exists
 from offline_rl.visualizations.utils import ignore_keyboard_interrupt
 
-load_env_variables()
+set_env_variables()
 
 OVERRIDE_DATA_SET = True
+
+logging.basicConfig(level=logging.INFO)
 
 
 @dataclass
@@ -120,13 +123,13 @@ def _create_minari_config(
     behavior_policy_name: str = "",
     env_2d_grid_initial_config: Grid2DInitialConfig = None,
 ) -> MinariDatasetConfig:
+    dataset_name += dataset_identifier
+
     name_expert_data = generate_compatible_minari_dataset_name(
         env_name,
         dataset_name,
         version_dataset,
     )
-
-    dataset_name += dataset_identifier
 
     dataset_config = {
         "env_name": env_name,
@@ -135,6 +138,7 @@ def _create_minari_config(
         "behavior_policy": behavior_policy_name,
     }
 
+    # Just to add custom grid config (initial/final states and type of obstacle) to the environment name.
     if env_2d_grid_initial_config is not None:
         dataset_config["initial_config_2d_grid_env"] = env_2d_grid_initial_config
         dataset_name = get_dataset_name_2d_grid(env_2d_grid_initial_config) + dataset_identifier
@@ -181,7 +185,14 @@ def create_minari_datasets(
         env_2d_grid_initial_config=env_2d_grid_initial_config,
     )
 
-    delete_minari_data_if_exists(dataset_config.data_set_name, override_dataset=OVERRIDE_DATA_SET)
+    try:
+        delete_minari_data_if_exists(
+            dataset_config.data_set_name,
+            override_dataset=OVERRIDE_DATA_SET,
+        )
+    except Exception as e:
+        logging.error(f"Failed to delete dataset '{dataset_config.data_set_name}': {e}")
+
     env = create_minari_collector_env_wrapper(
         dataset_config.env_name,
         dataset_config.initial_config_2d_grid_env,

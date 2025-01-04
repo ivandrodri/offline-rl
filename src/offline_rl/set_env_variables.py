@@ -1,7 +1,7 @@
 import os
 
 
-def load_env_variables(current_directory: str | None = None):
+def set_env_variables(current_directory: str | None = None):
     current_directory = (
         os.path.dirname(__file__) if current_directory is None else current_directory
     )

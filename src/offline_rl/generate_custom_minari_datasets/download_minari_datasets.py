@@ -3,9 +3,9 @@ import minari
 from offline_rl.generate_custom_minari_datasets.generate_minari_dataset import (
     MinariDatasetConfig,
 )
-from offline_rl.load_env_variables import load_env_variables
+from offline_rl.set_env_variables import set_env_variables
 
-load_env_variables()
+set_env_variables()
 
 
 def download_minari_dataset(data_set_name: str):
