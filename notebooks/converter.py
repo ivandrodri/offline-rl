@@ -9,23 +9,25 @@ from nbconvert import NotebookExporter
 from nbconvert.preprocessors import ExecutePreprocessor
 from nbformat import read, write
 
-# Get the current working directory (assuming script is run from the root of the project)
-src_parent_path = os.path.abspath(os.getcwd())
+# Define the base directory (assuming the script is run from the root directory)
+base_dir = os.path.abspath(os.getcwd())
 
-# Define the path to the 'notebooks' directory where converter.py is located
-notebooks_dir = os.path.join(src_parent_path, "notebooks")
-converter_path = os.path.join(notebooks_dir, "converter.py")
+# Define the path to the 'src' directory where 'offline_rl' is located
+src_dir = os.path.join(base_dir, "src")
 
-print(f"Appending {notebooks_dir} to sys.path")
+# Append the 'src' directory to sys.path
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
 
-# Add the notebooks directory to sys.path if not already present
-if notebooks_dir not in sys.path:
-    sys.path.append(notebooks_dir)
+print(f"Appending {src_dir} to sys.path")
 
 # Debug sys.path
 print("sys.path content after appending:")
 for path in sys.path:
     print(path)
+
+# Define the notebooks directory
+notebooks_dir = os.path.join(base_dir, "notebooks")
 
 # Create an ExecutePreprocessor instance
 ep = ExecutePreprocessor(timeout=600, kernel_name="python3")
