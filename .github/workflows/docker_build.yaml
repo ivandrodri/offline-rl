@@ -62,7 +62,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             -t ivanrodri2020/offlinerl:latest \
-#            --cache-from=type=registry,ref=ivanrodri2020/offlinerl:latest \
+##            --cache-from=type=registry,ref=ivanrodri2020/offlinerl:latest \
 #            --cache-to=type=registry,ref=ivanrodri2020/offlinerl:latest,mode=max \
             --push .
       - name: Check Disk Space (After Build)
