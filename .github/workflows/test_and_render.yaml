@@ -5,9 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: [ "Build docker image with the presentation" ]
-    types:
-      - completed
+#    workflows: [ "Build docker image with the presentation" ]
+#    types:
+#      - completed
 
 permissions:
   contents: write  # Allow write access to repository contents
