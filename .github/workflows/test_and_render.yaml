@@ -70,6 +70,15 @@ jobs:
             ivanrodri2020/offlinerl:latest \
             bash -c "ls -la /workspace/notebooks"
 
+      - name: Clean notebooks
+        run: |
+          docker run --rm \
+            -v /home/runner/work/offline-rl/offline-rl:/workspace \
+            ivanrodri2020/offlinerl:latest \
+            bash -c "
+              cd /workspace/notebooks && \
+              pip install nbconvert && \
+              jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace *.ipynb"
 
       - name: Execute notebooks to capture output
         run: |
