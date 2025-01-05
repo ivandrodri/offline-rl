@@ -79,7 +79,7 @@ jobs:
             bash -c "
               cd /workspace && \
               pip install nbconvert && \
-              python converter.py"
+              python notebooks/converter.py"
 #              cd /workspace/notebooks && \
 #              pip install nbconvert && \
 #              jupyter nbconvert --to notebook --execute --inplace *.ipynb"
