@@ -39,7 +39,7 @@ for notebook_filename in os.listdir(notebooks_dir):
 
         # Execute the notebook
         try:
-            ep.preprocess(notebook_content, {"metadata": {"path": src_parent_path}})
+            ep.preprocess(notebook_content, {"metadata": {"path": offline_rl_path}})
         except Exception as e:
             import traceback
 
