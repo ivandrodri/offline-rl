@@ -10,7 +10,6 @@ on:
         required: False
         default: Image built from master was outdated
 
-
 jobs:
   docker_build:
     runs-on: ubuntu-latest
@@ -62,8 +61,9 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             -t ivanrodri2020/offlinerl:latest \
-##            --cache-from=type=registry,ref=ivanrodri2020/offlinerl:latest \
-#            --cache-to=type=registry,ref=ivanrodri2020/offlinerl:latest,mode=max \
             --push .
+#            --cache-from=type=registry,ref=ivanrodri2020/offlinerl:latest \
+#            --cache-to=type=registry,ref=ivanrodri2020/offlinerl:latest,mode=max \
+#            --push .
       - name: Check Disk Space (After Build)
         run: df -h
