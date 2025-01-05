@@ -78,7 +78,8 @@ jobs:
             bash -c "
               cd /workspace/notebooks && \
               pip install nbconvert && \
-              jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace *.ipynb"
+              jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace *.ipynb"
+      #              jupyter nbconvert --to notebook --inplace --ClearMetadataPreprocessor.enabled=True *.ipynb"
 
       - name: Execute notebooks to capture output
         run: |
