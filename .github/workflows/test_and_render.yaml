@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  workflow_run:
+#  workflow_run:
 #    workflows: [ "Build docker image with the presentation" ]
 #    types:
 #      - completed
