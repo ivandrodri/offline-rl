@@ -11,8 +11,10 @@ from nbformat import read, write
 
 # Append the parent directory of 'src' to sys.path
 src_parent_path = os.path.abspath(os.getcwd())
-print(f"Appending {src_parent_path} to sys.path")
-sys.path.append(src_parent_path)
+
+src_path = os.path.join(src_parent_path, "src")
+print(f"Appending {src_path} to sys.path")
+sys.path.append(src_path)
 
 # Debug sys.path
 print("sys.path content after appending:")
