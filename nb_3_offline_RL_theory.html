@@ -446,8 +446,8 @@ Q^\pi(s, a) = \mathbb{E}_\pi \left[ r_0 + \gamma r_1 + \gamma^2 r_2 + \ldots \mi
 <h4>a) Non-implicit or Direct<a class="headerlink" href="#a-non-implicit-or-direct" title="Link to this heading">#</a></h4>
 <p><strong>We have access to the behavior policy, <span class="math notranslate nohighlight">\(\bf \pi_\beta\)</span></strong></p>
 <p>Since we already have <span class="math notranslate nohighlight">\(\pi_\beta\)</span>, we can constrain the learned and behavioral policy using:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3dd3bcac-3c35-47cd-82c3-95fa1c4e5048">
-<span class="eqno">(1)<a class="headerlink" href="#equation-3dd3bcac-3c35-47cd-82c3-95fa1c4e5048" title="Permalink to this equation">#</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-db6b8512-dc2c-48fb-9140-1e092124081e">
+<span class="eqno">(1)<a class="headerlink" href="#equation-db6b8512-dc2c-48fb-9140-1e092124081e" title="Permalink to this equation">#</a></span>\[\begin{equation}
 D_{KL}(\pi(.|s)||\pi_{\beta}(.|s)) \leq \epsilon
 \label{dk_1}
 \end{equation}\]</div>
@@ -530,8 +530,8 @@ max_\pi \eta(\pi) &amp;= max_\pi ( J(\pi) - J(\pi_\beta) ) \qquad \hbox{with} \q
 <p>so as higher <span class="math notranslate nohighlight">\(\eta(\pi)\)</span> the better <span class="math notranslate nohighlight">\(\pi\)</span> .</p>
 <p><strong>Note</strong>: This is a slightly different idea than what we usually follow to find the policy that maximizes the discounted reward.</p>
 <p>It can be shown that (2) can be written as:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3a75d0a6-b2f0-4f5d-8c5a-d6c4951c51c1">
-<span class="eqno">(2)<a class="headerlink" href="#equation-3a75d0a6-b2f0-4f5d-8c5a-d6c4951c51c1" title="Permalink to this equation">#</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-c17ebd70-5d71-4ea7-be9e-bb044ad6ad52">
+<span class="eqno">(2)<a class="headerlink" href="#equation-c17ebd70-5d71-4ea7-be9e-bb044ad6ad52" title="Permalink to this equation">#</a></span>\[\begin{equation}
 max_\pi \eta(\pi) = max_\pi \mathbb{E}_{s \sim d^{\pi}(s)} \mathbb{E}_{a \sim \pi(a|s)} [A^{\pi_\beta}(s, a)] \\ \text{s.t.} \quad D_{KL}(\pi(\cdot|s) || \pi_\beta(\cdot|s) ) \leq \epsilon
 \tag{3}
 \end{equation}\]</div>
