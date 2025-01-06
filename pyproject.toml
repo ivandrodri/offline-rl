@@ -43,6 +43,7 @@ virtualenv = [
 ]
 mujoco-py = "^2.1.2.14"
 pydantic = "^2.0"
+ffmpeg = "^1.4"
 
 
 [tool.poetry.group.add1]
@@ -84,6 +85,9 @@ tensorboardX="*"
 mujoco-py="^2.1.2.14"
 cython="^0.29.37"
 gym="*"
+mediapy = "*"
+ffmpeg = "*"
+nbconvert = "*"
 
 
 [tool.poetry.group.dev]

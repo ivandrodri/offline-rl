@@ -77,7 +77,6 @@ jobs:
             ivanrodri2020/offlinerl:latest \
             bash -c "
               cd /workspace/notebooks && \
-              pip install nbconvert && \
               jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace *.ipynb"
       #              jupyter nbconvert --to notebook --inplace --ClearMetadataPreprocessor.enabled=True *.ipynb"
 
@@ -88,8 +87,8 @@ jobs:
             ivanrodri2020/offlinerl:latest \
             bash -c "
               cd /workspace && \
-              pip install nbconvert && \
-              python notebooks/converter.py"
+              source /tmp/code/.venv/bin/activate && \
+              poetry run python notebooks/converter.py"
 #              cd /workspace/notebooks && \
 #              pip install nbconvert && \
 #              jupyter nbconvert --to notebook --execute --inplace *.ipynb"

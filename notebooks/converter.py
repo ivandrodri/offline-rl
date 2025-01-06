@@ -15,9 +15,13 @@ base_dir = os.path.abspath(os.getcwd())
 # Define the path to the 'src' directory where 'offline_rl' is located
 src_dir = os.path.join(base_dir, "src")
 
+notebooks_dir = os.path.join(base_dir, "notebooks")
+
 # Append the 'src' directory to sys.path
 if src_dir not in sys.path:
     sys.path.append(src_dir)
+    # sys.path.append(base_dir)
+    # sys.path.append(notebooks_dir)
 
 print(f"Appending {src_dir} to sys.path")
 
@@ -44,7 +48,7 @@ for notebook_filename in os.listdir(notebooks_dir):
 
         # Execute the notebook
         try:
-            ep.preprocess(notebook_content, {"metadata": {"path": notebooks_dir}})
+            ep.preprocess(notebook_content, {"metadata": {"path": src_dir}})
         except Exception as e:
             import traceback
 

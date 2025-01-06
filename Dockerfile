@@ -1,5 +1,4 @@
 #-------------- Base Image -------------------
-#-------------- Base Image -------------------
 FROM jupyter/minimal-notebook:python-3.11 as BASE
 
 ARG CODE_DIR=/tmp/code
@@ -20,6 +19,12 @@ ENV PATH="${POETRY_HOME}/bin:$PATH"
 
 USER root
 
+# Install ffmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN curl -sSL https://install.python-poetry.org | python -
 
 USER ${NB_UID}
@@ -28,10 +33,12 @@ WORKDIR $CODE_DIR
 
 COPY --chown=${NB_UID}:${NB_GID} poetry.lock pyproject.toml ./
 
-RUN poetry install --no-interaction --no-ansi --no-root --only main
-RUN poetry install --no-interaction --no-ansi --no-root --with add1
-RUN poetry install --no-interaction --no-ansi --no-root --with add2
-RUN poetry install --no-interaction --no-ansi --no-root --with offline
+#RUN poetry install --no-interaction --no-ansi --no-root --only main
+#RUN poetry install --no-interaction --no-ansi --no-root --with add1
+#RUN poetry install --no-interaction --no-ansi --no-root --with add2
+#RUN poetry install --no-interaction --no-ansi --no-root --with offline
+
+RUN poetry install --no-interaction --no-ansi --no-root --with main,add1,add2,offline
 
 COPY --chown=${NB_UID}:${NB_GID} src/ src/
 COPY --chown=${NB_UID}:${NB_GID} README.md .
