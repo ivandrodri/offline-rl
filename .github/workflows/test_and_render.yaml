@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-#  workflow_run:
-#    workflows: [ "Build docker image with the presentation" ]
-#    types:
-#      - completed
+  workflow_run:
+    workflows: [ "Build docker image with the presentation" ]
+    types:
+      - completed
 
 permissions:
   contents: write  # Allow write access to repository contents
@@ -103,24 +103,6 @@ jobs:
               cd /workspace/notebooks && \
               pip install jupyter-book && \
               jupyter-book build . --builder html "
-
-#            bash -c "
-#              cd /workspace/notebooks && \
-#              jupyter nbconvert --to html \
-#                --NbConvertApp.exporter_class='nbconvert.exporters.html.HTMLExporter' \
-#                --TemplateExporter.exclude_output=True \
-#                --HTMLExporter.template=lab \
-#                --HTMLExporter.embed_images=False \
-#                --HTMLExporter.toc=True *.ipynb "
-
-      #- name: Create index.html
-      #  run: |
-      #    echo "<html><body><h1>My Jupyter Notebooks</h1><ul>" > ./notebooks/index.html
-      #    for file in ./notebooks/*.html; do
-      #      filename=$(basename $file)
-      #      echo "<li><a href=\"$filename\">$filename</a></li>" >> ./notebooks/index.html
-      #    done
-      #    echo "</ul></body></html>" >> ./notebooks/index.html
 
       - name: Verify Generated Files
         run: |
