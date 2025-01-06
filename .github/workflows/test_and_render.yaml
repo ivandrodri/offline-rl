@@ -90,10 +90,6 @@ jobs:
               cd /workspace && \
               source /tmp/code/.venv/bin/activate && \
               poetry run python notebooks/converter.py"
-#              cd /workspace/notebooks && \
-#              pip install nbconvert && \
-#              jupyter nbconvert --to notebook --execute --inplace *.ipynb"
-
 
       - name: Convert Notebooks to HTML
         run: |
