@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  workflow_run:
-    workflows: [ "Build docker image with the presentation" ]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [ "Build docker image with the presentation" ]
+#    types:
+#      - completed
 
 permissions:
   contents: write  # Allow write access to repository contents
@@ -20,9 +20,6 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout repo
         uses: actions/checkout@v2.3.1
-
-      - name: Display Environment Variables
-        run: env
 
       # Step 2: Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -87,6 +84,7 @@ jobs:
         run: |
           docker run --rm \
             -v /home/runner/work/offline-rl/offline-rl:/workspace \
+            -e GITHUB_ACTIONS=$GITHUB_ACTIONS -e CI=$CI \
             ivanrodri2020/offlinerl:latest \
             bash -c "
               cd /workspace && \
