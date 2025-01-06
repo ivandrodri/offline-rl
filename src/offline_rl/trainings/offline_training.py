@@ -33,10 +33,11 @@ class OfflineRLTraining(TrainingInterface):
         return False
 
     @staticmethod
-    def training(training_config: OfflineTrainingHyperparams):
+    def training(training_config: OfflineTrainingHyperparams, show_progress: bool = True):
         """Offline policy training with a Minari dataset. The policy could be one of the ones you can find in
         /offline_policies/policy_registry.py .
 
+        :param show_progress:
         :param training_config:
         :return:
         """
@@ -105,6 +106,7 @@ class OfflineRLTraining(TrainingInterface):
             save_best_fn=save_best_fn,
             logger=logger,
             test_in_train=training_config.test_in_train,
+            show_progress=show_progress,
         ).run()
 
         # Save final policy
