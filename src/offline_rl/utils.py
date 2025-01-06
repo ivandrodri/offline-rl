@@ -19,6 +19,7 @@ from minari import EpisodeData
 from minari.storage import get_dataset_path
 from tianshou.data import Batch, ReplayBuffer
 from torch.utils.data import Dataset
+from tqdm import tqdm
 
 # ToDo: Refactor this file and clean the code
 
@@ -502,18 +503,28 @@ def widget_list(list_names: list[Any], description: str = ""):
 
 
 def conditional_capture(func):
+    """Decorator to capture the tqm progress bar output during CI/CD pipeline to remove it from html notebook versions.
+
+    :param func:
+    :return:
+    """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # Check for CI environment variables
         is_ci = os.getenv("CI") or os.getenv("GITHUB_ACTIONS") or os.getenv("GITLAB_CI")
 
         if is_ci:
-            # Capture output using StringIO when in CI environment
+            # Capture output during CI
             old_stdout = sys.stdout
             sys.stdout = StringIO()
+
             try:
-                return func(*args, **kwargs)
+                # Patch tqdm to write to the captured output stream during CI
+                with tqdm(total=0) as dummy_tqdm:
+                    dummy_tqdm.set_postfix({"status": "capturing"})
+                    return func(*args, **kwargs)
             finally:
+                # Restore the original stdout
                 sys.stdout = old_stdout
         else:
             return func(*args, **kwargs)
