@@ -1,0 +1,63 @@
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/conda/lib/python3.11/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/opt/conda/lib/python3.11/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/conda/lib/python3.11/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+from offline_rl.set_env_variables import set_env_variables
+
+set_env_variables()
+
+import warnings
+import os
+
+import gymnasium as gym
+from offline_rl.custom_envs.custom_2d_grid_env.obstacles_2D_grid_register import ObstacleTypes
+from offline_rl.custom_envs.custom_2d_grid_env.simple_grid import Custom2DGridEnv
+from offline_rl.custom_envs.custom_envs_registration import RenderMode
+from offline_rl.offline_policies.offpolicy_rendering import offpolicy_rendering
+from offline_rl.utils import load_buffer_minari
+from offline_rl.visualizations.utils import (
+    get_state_action_data_and_policy_grid_distributions,
+    snapshot_env,
+)
+from offline_rl.utils import widget_list
+from offline_rl.custom_envs.custom_envs_registration import EnvFactory
+from offline_rl.behavior_policies.behavior_policy_registry import BehaviorPolicy2dGridFactory
+from offline_rl.generate_custom_minari_datasets.generate_minari_dataset import (
+    create_minari_datasets,
+)
+
+
+if not os.environ.get("DISPLAY"):
+    os.environ["MUJOCO_GL"] = "egl"
+
+warnings.filterwarnings("ignore")
+
+# To get access to the registered environments.
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[3], line 1[0m
+[0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01moffline_rl[39;00m[38;5;21;01m.[39;00m[38;5;21;01mset_env_variables[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m set_env_variables
+[1;32m      3[0m set_env_variables()
+[1;32m      5[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mwarnings[39;00m
+
+[0;31mModuleNotFoundError[0m: No module named 'offline_rl'
+
