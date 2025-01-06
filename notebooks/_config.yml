@@ -6,8 +6,8 @@ author: Ivan Rodriguez
 #logo:
 
 execute:
-  #execute_notebooks: off
-  execute_notebooks: force
+  execute_notebooks: off
+  #execute_notebooks: force
   #timeout: 600
 
 sphinx:
